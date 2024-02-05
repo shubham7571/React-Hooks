@@ -36,11 +36,12 @@
 // import Counter from "./components/counter/Counter";
 // import UseHookEff from "./practics/UseHookEff";
 
-import { useState } from "react";
-import { NewContext } from "./HOOKS/NewContext";
-import UseContextPage1 from "./HOOKS/UseContextPage1";
-import Home from "./HOOKS/Home";
-import Spread from "./practics/Spread";
+// import { useState } from "react";
+// import { NewContext } from "./HOOKS/NewContext";
+// import UseContextPage1 from "./HOOKS/UseContextPage1";
+// import Home from "./HOOKS/Home";
+import InputForm from "./inputForm/InputForm";
+// import Spread from "./practics/Spread";
 
  
 // import Spread from "./practics/Spread";
@@ -120,7 +121,8 @@ function App() {
 
 
 
-
+{/* work form home */}
+<InputForm/>
 
 
 
@@ -147,7 +149,7 @@ function App() {
             {/* <UseHookEff  />*/}
             {/* <UseMemo/> */}
             {/* <UseRef/> */}
-            <Spread/>
+            {/* <Spread/> */}
              {/* <Home/> */}
         </div>
 
