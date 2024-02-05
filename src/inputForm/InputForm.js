@@ -36,21 +36,21 @@ function InputForm() {
     }
     const style = {
         backgroundImage: `url("https://images.pexels.com/photos/370799/pexels-photo-370799.jpeg?cs=srgb&dl=pexels-dana-tentis-370799.jpg&fm=jpg")`,
-        
+
     };
-    
+
     return (
         <form onSubmit={handleSubmit(onsubmit)} style={style}>
-            <div className=' w-1/2 pt-2 p-4 mx-auto bg-[#ffffff1d] pb-2  border-black backdrop-blur-[10px]'  >
+            <div className=' w-1/2 pt-2 p-4 mx-auto bg-[#ffffff1d] pb-2    border-black backdrop-blur-[10px]'  >
                 <h1 className='text-center mt-1 font-bold'>LOGIN FORM</h1>
                 <InputLabel className='mt-2 ml-2'> Student Name : </InputLabel>
                 <div className='grid grid-cols-2 gap-4 mt-2'>
-                    <TextField label="First Name" size='small'
-                        {...register("Firstname")} variant="outlined"
+                    <TextField label="First Name" size='small'  
+                        {...register("Firstname")} variant="outlined"   
                         error={errors.Firstname?.message}
                         helperText={errors.Firstname?.message}
                     />
-                    <TextField label="Last Name" size='small' variant="outlined"
+                    <TextField label="Last Name"  size='small' variant="outlined"
                         {...register("Lastname")}
                         error={errors.Lastname?.message}
                         helperText={errors.Lastname?.message}
@@ -97,7 +97,7 @@ function InputForm() {
                         helperText={errors.number?.message}
                     />
                 </div>
-                 <InputLabel className='mt-2 ml-2' >Birth Date</InputLabel>
+                <InputLabel className='mt-2 ml-2' >Birth Date</InputLabel>
                 <div className='space-x-4 md:grid grid-cols-1 md:gap-y-2  justify-between my-4'>
                     <TextField label="" type='date' size='small' variant="outlined"
                         {...register("date")}
@@ -111,14 +111,13 @@ function InputForm() {
                             size='small'
                             label="Gender"
                         >
-                            <MenuItem >Male</MenuItem>
-                            <MenuItem  >Female</MenuItem>
-                            <MenuItem  >Other</MenuItem>
+                            <MenuItem value="Male">Male</MenuItem>
+                            <MenuItem value="Feamle"  >Female</MenuItem>
+                            <MenuItem value="other" >Other</MenuItem>
                         </Select>
                     </FormControl>
-
                 </div>
-                    <InputLabel className='mt-2 ml-2'>Address </InputLabel>
+                <InputLabel className='mt-2 ml-2'>Address </InputLabel>
                 < div className=' mt-4'>
                     <TextField label="Address" size='small' variant="outlined"
                         {...register("Address")}
