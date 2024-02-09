@@ -36,7 +36,7 @@
 // import Counter from "./components/counter/Counter";
 // import UseHookEff from "./practics/UseHookEff";
 
-import ChildToParent from "./practics/ChildToParent";
+// import ChildToParent from "./practics/ChildToParent";
 
 // import { useState } from "react";
 // import { NewContext } from "./HOOKS/NewContext";
@@ -47,7 +47,7 @@ import ChildToParent from "./practics/ChildToParent";
 
  
 // import Spread from "./practics/Spread";
-
+import UseContextPage1 from './HOOKS/UseContextPage1';
 // import UseRef from "./practics/UseRef";
 
 // import UseMemo from "./practics/UseMemo";
@@ -117,7 +117,7 @@ function App() {
             {/* <Student /> */}
             {/* <Counter /> */}
 
-
+<UseContextPage1/>
 
 
 
@@ -153,7 +153,7 @@ function App() {
             {/* <UseRef/> */}
             {/* <Spread/> */}
              {/* <Home/> */}
-             <ChildToParent/>
+             {/* <ChildToParent/> */}
         </div>
 
     );
