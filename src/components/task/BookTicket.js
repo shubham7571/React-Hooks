@@ -82,33 +82,31 @@ function BookTickets() {
                     cardData.map((item) => {
                         const Card = ({ id, onClick, disabled }) => {
 
-                        return (
-                            <div className='border rounded-md  p-4'>
-                                <div className='flex justify-between'>
-                                    <h2>{item.name}</h2>
-                                    <div>
-                                        <button type='button'className='opacity: disabled ? 0.5 : 1,'onClick={() => onClick(id)} ><RemoveIcon /></button>
+                            return (
+                                <div className='border rounded-md  p-4'>
+                                    <div className='flex justify-between'>
+                                        <h2>{item.name}</h2>
+                                        <div>
+                                            <button type='button' className='opacity: disabled ? 0.5 : 1,' onClick={() => onClick(id)} ><RemoveIcon /></button>
 
-                                        <button type='button'className='opacity: disabled ? 0.5 : 1,'onClick={() => onClick(id)}  >< AddIcon /></button>
+                                            <button type='button' className='opacity: disabled ? 0.5 : 1,' onClick={() => onClick(id)}  >< AddIcon /></button>
+                                        </div>
                                     </div>
+                                    <h3>{item.subname}</h3>
+                                    <div className='flex justify-between '>
+                                        <h4>{item.info}</h4>
+                                        <h4 className='font-bold'>{item.price}</h4>
+                                    </div>
+                                    <hr />
+                                    <h4>{item.title}</h4>
+                                    <p>{item.subtitle}</p>
                                 </div>
-                                <h3>{item.subname}</h3>
-                                <div className='flex justify-between '>
-                                    <h4>{item.info}</h4>
-                                    <h4 className='font-bold'>{item.price}</h4>
-                                </div>
-                                <hr />
-                                <h4>{item.title}</h4>
-                                <p>{item.subtitle}</p>
-                            </div>
-                        )
-                    })
-                }
-                <div className='flex justify-evenly'>
-                    <p>Ticket</p>
-                    <p>Total.Rs.</p>
-                </div>
-                <button className='bg-red-500 rounded p-1'> Process</button>
+                                
+                            )
+                        }
+                    }
+                       
+                       
             </div>
         </div>
     )

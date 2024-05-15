@@ -36,6 +36,9 @@
 // import Counter from "./components/counter/Counter";
 // import UseHookEff from "./practics/UseHookEff";
 
+
+// import Table from "./practics/reuseableTable/Table";
+// import Result from "./components/softwaretask/Result";
 // import ChildToParent from "./practics/ChildToParent";
 
 // import { useState } from "react";
@@ -45,9 +48,9 @@
 // import InputForm from "./inputForm/InputForm";
 // import Spread from "./practics/Spread";
 
- 
+
 // import Spread from "./practics/Spread";
-import UseContextPage1 from './HOOKS/UseContextPage1';
+// import UseContextPage1 from './HOOKS/UseContextPage1';
 // import UseRef from "./practics/UseRef";
 
 // import UseMemo from "./practics/UseMemo";
@@ -60,16 +63,29 @@ import UseContextPage1 from './HOOKS/UseContextPage1';
 // import BasicFrom from "./practics/BasicFrom";
 // import UseHookRef from "./practics/UseHookRef";
 // import Student from "./practics/Student";
+
+
+// reacthookfrom
+// import TableFrom from "./components/reacthookform/TableFrom";
+// import ParentComponent from "./components/reacthookform/Props/ParentComponent"
+// import Form from "./components/hookform/Form";
+// import YupValidation from "./components/hookform/yupvalidation/YupValidation";
+// import Configuration from "./components/reacthookform/totalPriceGst/Configuration";
+// import CrudOperation from "./components/hookform/crudOperation/CrudOperation";
+// import ReuseableTable from "./components/reacthookform/reuseabletable/ReuseableTable";
+// import Navbar from "./components/reacthookform/reuseableTask/Navbar";
+// import UseRef from "./components/reacthookform/keyUpDown/UseRef";
+// import TableFrom from "./components/reacthookform/totalPriceGst/TableForm"
+// import Rough from "./components/softwaretask/Rough";
+// import ParrentTab from "./components/reacthookform/contextapi/ParrentTab"
+import Rough from "./components/reacthookform/timeset/Rough";
+import TimeSet from "./components/reacthookform/timeset/TimeSet";
 function App() {
     // const [text,setText] =useState("")
     // const [data,setdata] = useState(prop);
 
     return (
         <div>
-
-
-
-
             {/* <NewContext.Provider value={{text,setText}}>
                 {text}
                 <MyContext/>
@@ -116,33 +132,19 @@ function App() {
             {/* <InputFiledTask/> */}
             {/* <Student /> */}
             {/* <Counter /> */}
-
-<UseContextPage1/>
-
-
-
-
-
-{/* work form home */}
-{/* <InputForm/> */}
+            {/* <Table /> */}
+            {/* <UseContextPage1/> */}
 
 
 
 
 
+            {/* work form home */}
+            {/* <InputFrom/> */}
 
 
 
-
-
-
-
-
-
-
-
-
-
+            {/* <Result /> */}
             {/* object deletion problem */}
             {/* practics// */}
             {/* <Delete/> */}
@@ -152,8 +154,28 @@ function App() {
             {/* <UseMemo/> */}
             {/* <UseRef/> */}
             {/* <Spread/> */}
-             {/* <Home/> */}
-             {/* <ChildToParent/> */}
+            {/* <Home/> */}
+            {/* <ChildToParent/> */}
+
+            {/* new batch */}
+            {/* reacthookform */}
+            {/* <TableFrom /> */}
+            {/* <ParentComponent/> */}
+            {/* <TableForm/>  */}
+
+
+            {/* <Configuration /> */}
+            {/* <Form/> */}
+            {/* <YupValidation/> */}
+            {/* <CrudOperation /> */}
+            {/* <ModalReuseableTable/> */}
+            {/* <ReuseableTable /> */}
+            {/* <Navbar/> */}
+            {/* <UseRef/> */}
+            {/* <Rough/> */}
+            {/* <ParrentTab /> */}
+            <TimeSet/>
+            {/* <Rough/> */}
         </div>
 
     );

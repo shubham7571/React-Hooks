@@ -31,10 +31,10 @@ function Stepperpage2() {
               <div>
               </div>
             </div>
-<div className=' text-center text-xs p-2'>
-<h1>Thank you for your purchase .<br/>Please come again.</h1>
+            <div className=' text-center text-xs p-2'>
+              <h1>Thank you for your purchase .<br />Please come again.</h1>
 
-</div>
+            </div>
           </div>
 
         </div>
