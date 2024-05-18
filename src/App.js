@@ -78,8 +78,12 @@
 // import TableFrom from "./components/reacthookform/totalPriceGst/TableForm"
 // import Rough from "./components/softwaretask/Rough";
 // import ParrentTab from "./components/reacthookform/contextapi/ParrentTab"
+// import Rough from "./components/reacthookform/timeset/Rough";
+import CrudOperation from "./components/hookform/crudOperation/CrudOperation";
+import Axios from "./components/reacthookform/axios/Axios";
 import Rough from "./components/reacthookform/timeset/Rough";
 import TimeSet from "./components/reacthookform/timeset/TimeSet";
+import UseReducer from "./components/reacthookform/useReducer/UseReducer";
 function App() {
     // const [text,setText] =useState("")
     // const [data,setdata] = useState(prop);
@@ -174,8 +178,10 @@ function App() {
             {/* <UseRef/> */}
             {/* <Rough/> */}
             {/* <ParrentTab /> */}
-            <TimeSet/>
+            {/* <TimeSet/> */}
             {/* <Rough/> */}
+            {/* <UseReducer/> */}
+            <Axios/>
         </div>
 
     );

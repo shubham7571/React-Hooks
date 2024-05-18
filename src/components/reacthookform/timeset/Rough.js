@@ -5,17 +5,17 @@ function Rough() {
     const [listData, setListData] = useState([])
     console.log("display", display);
     const handleAdd = () => {
-        //     setListData([...listData,display])
-        //     // let temp = [...listData]
-        //     // temp.push(display)
-        //     // setListData(temp)
-        //     setDisplay("")
-        setListData((listData) => {
-            const updateListData = [...listData, display]
-            console.log("listData", updateListData);
-            return updateListData
-        })
-        setDisplay("")
+            setListData([...listData,display])
+            let temp = [...listData]
+            temp.push(display)
+            setListData(temp)
+            setDisplay("")
+        // setListData((listData) => {
+        //     const updateListData = [...listData, display]
+        //     console.log("listData", updateListData);
+        //     return updateListData
+        // })
+        // setDisplay("")
     }
 
     const handleDelete=(index) => {
