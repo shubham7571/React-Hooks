@@ -80,6 +80,7 @@
 // import ParrentTab from "./components/reacthookform/contextapi/ParrentTab"
 // import Rough from "./components/reacthookform/timeset/Rough";
 import CrudOperation from "./components/hookform/crudOperation/CrudOperation";
+import PatientRegistration from "./components/patient registration/PatientRegistration";
 import Axios from "./components/reacthookform/axios/Axios";
 import Rough from "./components/reacthookform/timeset/Rough";
 import TimeSet from "./components/reacthookform/timeset/TimeSet";
@@ -181,7 +182,8 @@ function App() {
             {/* <TimeSet/> */}
             {/* <Rough/> */}
             {/* <UseReducer/> */}
-            <Axios/>
+            {/* <Axios/> */}
+            <PatientRegistration/>
         </div>
 
     );
