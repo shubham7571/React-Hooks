@@ -2,6 +2,8 @@ import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@m
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { Prefix } from '../../services/PatientRegistration';
+import { API_COMMON_URL } from '../../http';
 
 function PatientRegistration() {
     const { register, handleSubmit, reset, watch } = useForm();
@@ -10,7 +12,8 @@ function PatientRegistration() {
     const [marriedStatus, setMarriedStatus] = useState([]);
     const [gender, setGender] = useState([]);
     const [blood, setBlood] = useState([]);
-
+    const [genderName, setGenderName] = useState(null)
+    const [maritalStatus, setMaritalStatus] = useState({})
     const calculateAge = (dob) => {
         const today = new Date();
         const birthDate = new Date(dob);
@@ -37,48 +40,56 @@ function PatientRegistration() {
         const { years, months, days } = calculateAge(data.dob);
         const formData = { ...data, years, months, days, gender: selectedGender };
 
-        try {
-            const response = await fetch('http://localhost:8081/registration/saveUser', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
 
-            if (response.ok) {
-                console.log('Form submitted successfully');
-                // You can handle success feedback here
-                reset();
-                setSelectedGender('');
-            } else {
-                console.error('Form submission failed');
-                // You can handle error feedback here
+        let tempObj = {
+            email: data?.email,
+            dob: data?.dob,
+            age: data?.age,
+            gender: {
+                id: genderName?.id,
+                genderName: genderName?.value
+            },
+            maritalStatusId: {
+                id: maritalStatus?.id,
+                maritalStatusName: maritalStatus?.value
             }
-        } catch (error) {
-            console.error('Error submitting form:', error);
-            // Handle error feedback here
+
         }
+        console.log("tempArr", tempObj);
+        axios.post(`${API_COMMON_URL}/registration/saveUser`, tempObj)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
     };
 
     const dob = watch('dob');
 
     const ageDetails = dob ? calculateAge(dob) : { age: '', years: '', months: '', days: '' };
 
+    const handleAddGender = (value, id) => {
+        setGenderName({ value: value, id: id })
+
+    }
+    const handleMaritalStatus = (value, id) => {
+        setMaritalStatus({ value: value, id: id })
+    }
     // preFix
     useEffect(() => {
-        axios.get('http://192.168.0.85:8081/getPrefixDropDown')
+        Prefix()
             .then((res) => {
-                console.log(res);
-                setPrefix(res.data); // Assuming res.data contains the array of prefixes
+                console.log("res", res);
+                setPrefix(res);
             })
             .catch((error) => {
                 console.log(error);
-            });
+            })
     }, []);
     //Married Status
     useEffect(() => {
-        axios.get("http://192.168.0.85:8081/getMaritalStatusDropDown")
+        axios.get("http://192.168.6.12:8081/getMaritalStatusDropDown")
             .then((res) => {
                 setMarriedStatus(res.data)
             })
@@ -88,7 +99,7 @@ function PatientRegistration() {
     }, [])
     //Gender
     useEffect(() => {
-        axios.get("http://192.168.0.85:8081/getGender")
+        axios.get("http://192.168.6.12:8081/getGender")
             .then((res) => {
                 setGender(res.data)
             })
@@ -242,11 +253,11 @@ function PatientRegistration() {
                                     label="Gender"
                                     size='small'
                                     className='min-w-[120px]'
-                                    {...register('maritalStatus')}
+
                                 >
                                     {
                                         gender.map((item, index) => (
-                                            <MenuItem key={index} value={item.value}>{item.name}</MenuItem>
+                                            <MenuItem onClick={() => { handleAddGender(item.value, item.id) }} key={index} value={item.value}>{item.name}</MenuItem>
                                         ))
                                     }
                                 </Select>
@@ -280,7 +291,7 @@ function PatientRegistration() {
                                 >
                                     {
                                         marriedStatus.map((item, index) => (
-                                            <MenuItem key={index} value={item.value}>{item.name}</MenuItem>
+                                            <MenuItem onClick={() => { handleMaritalStatus(item.value, item.id) }} key={index} value={item.value}>{item.name}</MenuItem>
                                         ))
                                     }
                                 </Select>
