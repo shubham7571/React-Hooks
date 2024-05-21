@@ -88,9 +88,11 @@ import UseReducer from "./components/reacthookform/useReducer/UseReducer";
 function App() {
     // const [text,setText] =useState("")
     // const [data,setdata] = useState(prop);
+    
 
     return (
         <div>
+            
             {/* <NewContext.Provider value={{text,setText}}>
                 {text}
                 <MyContext/>

@@ -1,11 +1,15 @@
-import { Button, ButtonGroup, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
-import React, { useState } from 'react';
+import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 function PatientRegistration() {
     const { register, handleSubmit, reset, watch } = useForm();
     const [selectedGender, setSelectedGender] = useState('');
-
+    const [prefix, setPrefix] = useState([]);
+    const [marriedStatus, setMarriedStatus] = useState([]);
+    const [gender, setGender] = useState([]);
+    const [blood, setBlood] = useState([]);
 
     const calculateAge = (dob) => {
         const today = new Date();
@@ -29,24 +33,81 @@ function PatientRegistration() {
         return { age: years, years, months, days };
     };
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         const { years, months, days } = calculateAge(data.dob);
-        const formData = { ...data, years, months, days, gender: selectedGender }; // Include selectedGender in the form data
-        console.log("submit", formData);
-        reset();
-        setSelectedGender('');
+        const formData = { ...data, years, months, days, gender: selectedGender };
+
+        try {
+            const response = await fetch('http://localhost:8081/registration/saveUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                console.log('Form submitted successfully');
+                // You can handle success feedback here
+                reset();
+                setSelectedGender('');
+            } else {
+                console.error('Form submission failed');
+                // You can handle error feedback here
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            // Handle error feedback here
+        }
     };
 
     const dob = watch('dob');
 
     const ageDetails = dob ? calculateAge(dob) : { age: '', years: '', months: '', days: '' };
-    const handleGenderSelect = (value) => {
-        setSelectedGender(value);
-    };
 
-
+    // preFix
+    useEffect(() => {
+        axios.get('http://192.168.0.85:8081/getPrefixDropDown')
+            .then((res) => {
+                console.log(res);
+                setPrefix(res.data); // Assuming res.data contains the array of prefixes
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+    //Married Status
+    useEffect(() => {
+        axios.get("http://192.168.0.85:8081/getMaritalStatusDropDown")
+            .then((res) => {
+                setMarriedStatus(res.data)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }, [])
+    //Gender
+    useEffect(() => {
+        axios.get("http://192.168.0.85:8081/getGender")
+            .then((res) => {
+                setGender(res.data)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }, [])
+    //
+    useEffect(() => {
+        axios.get(" http://192.168.0.85:8081/getBloodGroupDropDown")
+            .then((res) => {
+                setBlood(res.data)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }, [])
     return (
-        <form className='m-4' onSubmit={handleSubmit(onSubmit)}>
+        <form className='m-4 border ' onSubmit={handleSubmit(onSubmit)}>
             <div className="shadow-lg p-2 rounded">
                 <div>
                     {/* Patient Basic Information */}
@@ -89,10 +150,16 @@ function PatientRegistration() {
                                     size='small'
                                     {...register('prefix')}
                                 >
-                                    <MenuItem value="mr">Mr</MenuItem>
-                                    <MenuItem value="miss">Miss</MenuItem>
+                                    {
+                                        prefix.length > 0
+                                            ? prefix.map((item, index) => (
+                                                <MenuItem key={index} value={item.value}>{item.name}</MenuItem>
+                                            ))
+                                            : null
+                                    }
                                 </Select>
                             </FormControl>
+
                             <TextField
                                 id="firstName"
                                 size="small"
@@ -167,29 +234,23 @@ function PatientRegistration() {
                                     readOnly: true,
                                 }}
                             />
-                            <ButtonGroup variant="outlined" size='small' aria-label="Basic button group">
-                                <div className="flex items-center">
-                                    <h1 className="mr-2">Gender</h1>
-                                    <Button
-                                        onClick={() => handleGenderSelect('male')}
-                                        style={{ backgroundColor: selectedGender === 'male' ? '#007bff' : '#fff', color: selectedGender === 'male' ? '#fff' : '#000' }}
-                                    >
-                                        Male
-                                    </Button>
-                                    <Button
-                                        onClick={() => handleGenderSelect('female')}
-                                        style={{ backgroundColor: selectedGender === 'female' ? '#007bff' : '#fff', color: selectedGender === 'female' ? '#fff' : '#000' }}
-                                    >
-                                        Female
-                                    </Button>
-                                    <Button
-                                        onClick={() => handleGenderSelect('other')}
-                                        style={{ backgroundColor: selectedGender === 'other' ? '#007bff' : '#fff', color: selectedGender === 'other' ? '#fff' : '#000' }}
-                                    >
-                                        Other
-                                    </Button>
-                                </div>
-                            </ButtonGroup>
+                            <FormControl>
+                                <InputLabel id="maritalStatus-label">Gender</InputLabel>
+                                <Select
+                                    labelId="maritalStatus-label"
+                                    id="maritalStatus"
+                                    label="Gender"
+                                    size='small'
+                                    className='min-w-[120px]'
+                                    {...register('maritalStatus')}
+                                >
+                                    {
+                                        gender.map((item, index) => (
+                                            <MenuItem key={index} value={item.value}>{item.name}</MenuItem>
+                                        ))
+                                    }
+                                </Select>
+                            </FormControl>
 
                         </div>
                         <div className='grid grid-cols-5 gap-4'>
@@ -217,8 +278,11 @@ function PatientRegistration() {
                                     className='min-w-[120px]'
                                     {...register('maritalStatus')}
                                 >
-                                    <MenuItem value="single">Single</MenuItem>
-                                    <MenuItem value="married">Married</MenuItem>
+                                    {
+                                        marriedStatus.map((item, index) => (
+                                            <MenuItem key={index} value={item.value}>{item.name}</MenuItem>
+                                        ))
+                                    }
                                 </Select>
                             </FormControl>
                             <FormControl>
@@ -245,10 +309,11 @@ function PatientRegistration() {
                                     className='min-w-[120px]'
                                     {...register('bloodGroup')}
                                 >
-                                    <MenuItem value="A+">A+</MenuItem>
-                                    <MenuItem value="B+">B+</MenuItem>
-                                    <MenuItem value="O+">O+</MenuItem>
-                                    <MenuItem value="AB+">AB+</MenuItem>
+                                    {
+                                        blood.map((item, index) => (
+                                            <MenuItem key={index} value={item.value}>{item.name}</MenuItem>
+                                        ))
+                                    }
                                 </Select>
                             </FormControl>
                         </div>
