@@ -2,18 +2,29 @@ import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@m
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Prefix } from '../../services/PatientRegistration';
+import { BloodGroupApi, GenderApi, IsdApi, MarriedStatusApi, NationalityApi, Prefix, PrefixApi } from '../../services/PatientRegistration';
 import { API_COMMON_URL } from '../../http';
 
 function PatientRegistration() {
     const { register, handleSubmit, reset, watch } = useForm();
     const [selectedGender, setSelectedGender] = useState('');
     const [prefix, setPrefix] = useState([]);
+    const [isd, setIsd] = useState([]);
     const [marriedStatus, setMarriedStatus] = useState([]);
     const [gender, setGender] = useState([]);
     const [blood, setBlood] = useState([]);
+    const [nationality, setNationality] = useState([]);
+
+
+    const [prefixName, setPrefixName] = useState([]);
     const [genderName, setGenderName] = useState(null)
     const [maritalStatus, setMaritalStatus] = useState({})
+    const [bloodGroup, setBloodGroup] = useState([])
+    const [nationalityName, setNationalityName] = useState([])
+    const [isdCode, setIsdCode] = useState([])
+
+
+    //calculation of age years months days
     const calculateAge = (dob) => {
         const today = new Date();
         const birthDate = new Date(dob);
@@ -39,8 +50,6 @@ function PatientRegistration() {
     const onSubmit = async (data) => {
         const { years, months, days } = calculateAge(data.dob);
         const formData = { ...data, years, months, days, gender: selectedGender };
-
-
         let tempObj = {
             email: data?.email,
             dob: data?.dob,
@@ -52,10 +61,33 @@ function PatientRegistration() {
             maritalStatusId: {
                 id: maritalStatus?.id,
                 maritalStatusName: maritalStatus?.value
-            }
-
+            },
+            isdCode: {
+                id: isdCode?.id,
+                isdCode: isdCode?.value
+            },
+            nationality: {
+                id: nationalityName?.id,
+                nationalityName: nationalityName?.value
+            },
+            bloodGroup: {
+                id: bloodGroup?.id,
+                bloodGroup: bloodGroup?.value
+            },
+            mob: data?.mob,
+            prefix: {
+                id: prefixName?.id,
+                prefix: prefixName?.value
+            },
+            fname: data?.firstName,
+            mname: data?.middleName,
+            lname: data?.lastName,
+            mob: data?.mobile,
         }
         console.log("tempArr", tempObj);
+
+
+        //post api
         axios.post(`${API_COMMON_URL}/registration/saveUser`, tempObj)
             .then((res) => {
                 console.log(res);
@@ -63,12 +95,19 @@ function PatientRegistration() {
             .catch((error) => {
                 console.log(error);
             })
+
+
+        reset();
     };
 
     const dob = watch('dob');
 
     const ageDetails = dob ? calculateAge(dob) : { age: '', years: '', months: '', days: '' };
 
+    const handleAddPrefix = (value, id) => {
+        setPrefixName({ value: value, id: id })
+
+    }
     const handleAddGender = (value, id) => {
         setGenderName({ value: value, id: id })
 
@@ -76,9 +115,19 @@ function PatientRegistration() {
     const handleMaritalStatus = (value, id) => {
         setMaritalStatus({ value: value, id: id })
     }
-    // preFix
+    const handleAddBloodGroup = (value, id) => {
+        setBloodGroup({ value: value, id: id })
+    }
+    const handleNationality = (value, id) => {
+        setNationalityName({ value: value, id: id })
+    }
+    const handleIsd = (value, id) => {
+        setIsdCode({ value: value, id: id })
+    }
+    // get apis
     useEffect(() => {
-        Prefix()
+        // preFix api
+        PrefixApi()
             .then((res) => {
                 console.log("res", res);
                 setPrefix(res);
@@ -86,37 +135,49 @@ function PatientRegistration() {
             .catch((error) => {
                 console.log(error);
             })
+        //Married Status api
+        MarriedStatusApi()
+            .then((res) => {
+                setMarriedStatus(res)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        //Gender api
+        GenderApi()
+            .then((res) => {
+                setGender(res)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        //bloodgroup api
+        BloodGroupApi()
+            .then((res) => {
+                setBlood(res)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        //NationalityApi
+        NationalityApi()
+            .then((res) => {
+                setNationality(res)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        //Isdapi
+        IsdApi()
+            .then((res) => {
+                setIsd(res)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }, []);
-    //Married Status
-    useEffect(() => {
-        axios.get("http://192.168.6.12:8081/getMaritalStatusDropDown")
-            .then((res) => {
-                setMarriedStatus(res.data)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }, [])
-    //Gender
-    useEffect(() => {
-        axios.get("http://192.168.6.12:8081/getGender")
-            .then((res) => {
-                setGender(res.data)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }, [])
-    //
-    useEffect(() => {
-        axios.get(" http://192.168.0.85:8081/getBloodGroupDropDown")
-            .then((res) => {
-                setBlood(res.data)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }, [])
+
+
     return (
         <form className='m-4 border ' onSubmit={handleSubmit(onSubmit)}>
             <div className="shadow-lg p-2 rounded">
@@ -126,6 +187,7 @@ function PatientRegistration() {
                         <div className='grid grid-cols-3 gap-2 my-4'>
                             <TextField
                                 id="search"
+                                name='Search By Patient Name/UHID/Mobile No'
                                 size="small"
                                 className='w-full'
                                 label="Search By Patient Name/UHID/Mobile No "
@@ -134,6 +196,7 @@ function PatientRegistration() {
                             />
                             <TextField
                                 id="email"
+                                name='email'
                                 size="small"
                                 className='w-full'
                                 label="Email Id"
@@ -142,6 +205,7 @@ function PatientRegistration() {
                             />
                             <TextField
                                 id="registrationDate"
+                                name='registrationDate'
                                 size="small"
                                 className='w-full'
                                 label="Registration Date"
@@ -157,14 +221,15 @@ function PatientRegistration() {
                                 <Select
                                     labelId="prefix-label"
                                     id="prefix"
+                                    name='prefix'
                                     label="Prefix*"
                                     size='small'
                                     {...register('prefix')}
                                 >
                                     {
-                                        prefix.length > 0
+                                        prefix?.length > 0
                                             ? prefix.map((item, index) => (
-                                                <MenuItem key={index} value={item.value}>{item.name}</MenuItem>
+                                                <MenuItem onClick={() => { handleAddPrefix(item.value, item.id) }} key={index} value={item.value}>{item.name}</MenuItem>
                                             ))
                                             : null
                                     }
@@ -173,6 +238,7 @@ function PatientRegistration() {
 
                             <TextField
                                 id="firstName"
+                                name='firstName'
                                 size="small"
                                 label="First Name *"
                                 variant="outlined"
@@ -180,6 +246,7 @@ function PatientRegistration() {
                             />
                             <TextField
                                 id="middleName"
+                                name='middleName'
                                 className='w-full'
                                 size="small"
                                 label="Middle Name"
@@ -188,6 +255,7 @@ function PatientRegistration() {
                             />
                             <TextField
                                 id="lastName"
+                                name='lastName'
                                 className='w-full'
                                 size="small"
                                 label="Last Name *"
@@ -198,6 +266,7 @@ function PatientRegistration() {
                         <div className='grid grid-cols-7 gap-2 my-4'>
                             <TextField
                                 id="dob"
+                                name='dob'
                                 size="small"
                                 label="Date of Birth"
                                 InputLabelProps={{ shrink: true }}
@@ -207,6 +276,7 @@ function PatientRegistration() {
                             />
                             <TextField
                                 id="age"
+                                name='age'
                                 size="small"
                                 label="Age"
                                 variant="outlined"
@@ -217,6 +287,7 @@ function PatientRegistration() {
                             />
                             <TextField
                                 id="years"
+                                name='years'
                                 size="small"
                                 label="Years"
                                 variant="outlined"
@@ -227,6 +298,7 @@ function PatientRegistration() {
                             />
                             <TextField
                                 id="months"
+                                name='months'
                                 size="small"
                                 label="Months"
                                 variant="outlined"
@@ -237,6 +309,7 @@ function PatientRegistration() {
                             />
                             <TextField
                                 id="days"
+                                name='days'
                                 size="small"
                                 label="Days"
                                 variant="outlined"
@@ -246,34 +319,47 @@ function PatientRegistration() {
                                 }}
                             />
                             <FormControl>
-                                <InputLabel id="maritalStatus-label">Gender</InputLabel>
+                                <InputLabel id="gender-label">Gender</InputLabel>
                                 <Select
-                                    labelId="maritalStatus-label"
-                                    id="maritalStatus"
+                                    labelId="gender-label"
+                                    id="gender"
+                                    name='gender'
                                     label="Gender"
                                     size='small'
                                     className='min-w-[120px]'
-
                                 >
                                     {
-                                        gender.map((item, index) => (
+                                        gender?.map((item, index) => (
                                             <MenuItem onClick={() => { handleAddGender(item.value, item.id) }} key={index} value={item.value}>{item.name}</MenuItem>
                                         ))
                                     }
                                 </Select>
                             </FormControl>
 
+
                         </div>
                         <div className='grid grid-cols-5 gap-4'>
-                            <TextField
-                                id="isd"
-                                size="small"
-                                label="ISD*"
-                                variant="outlined"
-                                {...register('isd')}
-                            />
+                            <FormControl>
+                                <InputLabel id="isd-label">ISD*</InputLabel>
+                                <Select
+                                    labelId="isd-label"
+                                    id="isd"
+                                    name='isd'
+                                    label="ISD*"
+                                    size='small'
+                                    className='min-w-[120px]'
+                                    {...register('isd')}
+                                >
+                                    {
+                                        isd?.map((item, index) => (
+                                            <MenuItem onClick={() => { handleIsd(item.value, item.id) }} key={index} value={item.value}>{item.name}</MenuItem>
+                                        ))
+                                    }
+                                </Select>
+                            </FormControl>
                             <TextField
                                 id="mobile"
+                                name='mobile'
                                 size="small"
                                 label="Mobile *"
                                 variant="outlined"
@@ -284,13 +370,14 @@ function PatientRegistration() {
                                 <Select
                                     labelId="maritalStatus-label"
                                     id="maritalStatus"
+                                    name='maritalStatus'
                                     label="Marital Status"
                                     size='small'
                                     className='min-w-[120px]'
                                     {...register('maritalStatus')}
                                 >
                                     {
-                                        marriedStatus.map((item, index) => (
+                                        marriedStatus?.map((item, index) => (
                                             <MenuItem onClick={() => { handleMaritalStatus(item.value, item.id) }} key={index} value={item.value}>{item.name}</MenuItem>
                                         ))
                                     }
@@ -301,13 +388,17 @@ function PatientRegistration() {
                                 <Select
                                     labelId="nationality-label"
                                     id="nationality"
+                                    name='nationality'
                                     label="Nationality"
                                     size='small'
                                     className='min-w-[120px]'
                                     {...register('nationality')}
                                 >
-                                    <MenuItem value="Indian">Indian</MenuItem>
-                                    <MenuItem value="other">Other</MenuItem>
+                                    {
+                                        nationality.map((item, index) => (
+                                            <MenuItem onClick={() => { handleNationality(item.value, item.id) }} key={index} value={item.value}>{item.name}</MenuItem>
+                                        ))
+                                    }
                                 </Select>
                             </FormControl>
                             <FormControl>
@@ -315,14 +406,15 @@ function PatientRegistration() {
                                 <Select
                                     labelId="bloodGroup-label"
                                     id="bloodGroup"
+                                    name='bloodGroup'
                                     label="Blood Group"
                                     size='small'
                                     className='min-w-[120px]'
                                     {...register('bloodGroup')}
                                 >
                                     {
-                                        blood.map((item, index) => (
-                                            <MenuItem key={index} value={item.value}>{item.name}</MenuItem>
+                                        blood?.map((item, index) => (
+                                            <MenuItem onClick={() => { handleAddBloodGroup(item.value, item.id) }} key={index} value={item.value}>{item.name}</MenuItem>
                                         ))
                                     }
                                 </Select>
