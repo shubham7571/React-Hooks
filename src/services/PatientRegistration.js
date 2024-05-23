@@ -16,15 +16,20 @@ export const GenderApi = async () => {
     return res.data
 }
 //BloodGroupapi
-export const  BloodGroupApi = async () => {
+export const BloodGroupApi = async () => {
     let res = await axios.get(`${API_COMMON_URL}/getBloodGroupDropDown`)
     return res.data
 }
-export const  NationalityApi =async()=>{
+export const NationalityApi = async () => {
     let res = await axios.get(`${API_COMMON_URL}/getNationalityDropdown`)
     return res.data
 }
-export const  IsdApi  =async()=>{
+export const IsdApi = async () => {
     let res = await axios.get(`${API_COMMON_URL}/getIsdCodeDropdown`)
+    return res.data
+}
+
+export const countryApi = async () => {
+    let res = await axios.get('http://192.168.0.188:8080/countries')
     return res.data
 }

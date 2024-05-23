@@ -79,6 +79,10 @@
 // import Rough from "./components/softwaretask/Rough";
 // import ParrentTab from "./components/reacthookform/contextapi/ParrentTab"
 // import Rough from "./components/reacthookform/timeset/Rough";
+import FilterMethod from "./components/arraymethod/FilterMethod";
+import Find from "./components/arraymethod/Find";
+import FindIndex from "./components/arraymethod/FindIndex";
+import Includes from "./components/arraymethod/Includes";
 import CrudOperation from "./components/hookform/crudOperation/CrudOperation";
 import PatientRegistration from "./components/patient registration/PatientRegistration";
 import Axios from "./components/reacthookform/axios/Axios";
@@ -186,6 +190,13 @@ function App() {
             {/* <UseReducer/> */}
             {/* <Axios/> */}
             <PatientRegistration/>
+
+
+            {/* array method */}
+            {/* <FilterMethod/> */}
+            {/* <FindIndex/> */}
+            {/* <Find/> */}
+            {/* <Includes/> */}
         </div>
 
     );

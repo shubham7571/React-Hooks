@@ -2,26 +2,31 @@ import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@m
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { BloodGroupApi, GenderApi, IsdApi, MarriedStatusApi, NationalityApi, Prefix, PrefixApi } from '../../services/PatientRegistration';
+import { BloodGroupApi, GenderApi, IsdApi, MarriedStatusApi, NationalityApi, PrefixApi, countryApi } from '../../services/PatientRegistration';
 import { API_COMMON_URL } from '../../http';
 
 function PatientRegistration() {
     const { register, handleSubmit, reset, watch } = useForm();
-    const [selectedGender, setSelectedGender] = useState('');
     const [prefix, setPrefix] = useState([]);
     const [isd, setIsd] = useState([]);
     const [marriedStatus, setMarriedStatus] = useState([]);
     const [gender, setGender] = useState([]);
     const [blood, setBlood] = useState([]);
     const [nationality, setNationality] = useState([]);
+    const [country, setCountry] = useState([])
+    console.log("country", country);
 
 
-    const [prefixName, setPrefixName] = useState([]);
-    const [genderName, setGenderName] = useState(null)
+
+    const [prefixName, setPrefixName] = useState({});
+    const [genderName, setGenderName] = useState({})
     const [maritalStatus, setMaritalStatus] = useState({})
-    const [bloodGroup, setBloodGroup] = useState([])
-    const [nationalityName, setNationalityName] = useState([])
-    const [isdCode, setIsdCode] = useState([])
+    const [bloodGroup, setBloodGroup] = useState({})
+    const [nationalityName, setNationalityName] = useState({})
+    const [isdCode, setIsdCode] = useState({});
+    const [countryName, setCountryName] = useState({});
+
+
 
 
     //calculation of age years months days
@@ -48,8 +53,8 @@ function PatientRegistration() {
     };
 
     const onSubmit = async (data) => {
-        const { years, months, days } = calculateAge(data.dob);
-        const formData = { ...data, years, months, days, gender: selectedGender };
+
+
         let tempObj = {
             email: data?.email,
             dob: data?.dob,
@@ -83,21 +88,15 @@ function PatientRegistration() {
             mname: data?.middleName,
             lname: data?.lastName,
             mob: data?.mobile,
+        };
+
+        try {
+            const res = await axios.post(`${API_COMMON_URL}/registration/saveUser`, tempObj);
+            console.log(res.data);
+            reset(); // Reset the form after successful submission
+        } catch (error) {
+            console.error(error);
         }
-        console.log("tempArr", tempObj);
-
-
-        //post api
-        axios.post(`${API_COMMON_URL}/registration/saveUser`, tempObj)
-            .then((res) => {
-                console.log(res);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-
-
-        reset();
     };
 
     const dob = watch('dob');
@@ -123,6 +122,9 @@ function PatientRegistration() {
     }
     const handleIsd = (value, id) => {
         setIsdCode({ value: value, id: id })
+    }
+    const handleAddCountry = (value, id) => {
+        setCountryName({ value: value, id: id })
     }
     // get apis
     useEffect(() => {
@@ -175,15 +177,35 @@ function PatientRegistration() {
             .catch((error) => {
                 console.log(error)
             })
+
+
     }, []);
+
+    useEffect(() => {
+        // countryApi
+        countryApi()
+            .then((res) => {
+                setCountry(res)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+
+    }, [])
 
 
     return (
-        <form className='m-4 border ' onSubmit={handleSubmit(onSubmit)}>
-            <div className="shadow-lg p-2 rounded">
+        <form className='m-4  border-2 ' onSubmit={handleSubmit(onSubmit)}>
+            <div className='text-center h-16 p-4 font-bold text-xl bg-gray-200 '>
+                <h1>Patient Registration</h1>
+            </div>
+            <div className="shadow-2xl p-2 rounded">
+
                 <div>
+
                     {/* Patient Basic Information */}
-                    <div className='m-2'>
+                    <h1 className='font-bold  '>Patient Basic Information</h1>
+                    <div className=''>
                         <div className='grid grid-cols-3 gap-2 my-4'>
                             <TextField
                                 id="search"
@@ -215,35 +237,39 @@ function PatientRegistration() {
                                 {...register('registrationDate')}
                             />
                         </div>
-                        <div className='grid grid-cols-4 gap-2 my-4'>
-                            <FormControl>
-                                <InputLabel id="prefix-label">Prefix*</InputLabel>
-                                <Select
-                                    labelId="prefix-label"
-                                    id="prefix"
-                                    name='prefix'
-                                    label="Prefix*"
-                                    size='small'
-                                    {...register('prefix')}
-                                >
-                                    {
-                                        prefix?.length > 0
-                                            ? prefix.map((item, index) => (
-                                                <MenuItem onClick={() => { handleAddPrefix(item.value, item.id) }} key={index} value={item.value}>{item.name}</MenuItem>
-                                            ))
-                                            : null
-                                    }
-                                </Select>
-                            </FormControl>
+                        <div className='grid grid-cols-3 gap-2 my-4'>
+                            <div className='flex justify-around gap-2 '>
+                                <FormControl>
+                                    <InputLabel id="prefix-label">Prefix*</InputLabel>
+                                    <Select
+                                        labelId="prefix-label"
+                                        id="prefix"
+                                        name='prefix'
+                                        label="Prefix*"
+                                        size='small'
+                                        className='w-48'
+                                        {...register('prefix')}
+                                    >
+                                        {
+                                            prefix?.length > 0
+                                                ? prefix?.map((item, index) => (
+                                                    <MenuItem onClick={() => { handleAddPrefix(item.value, item.id) }} key={index} value={item.value}>{item.name}</MenuItem>
+                                                ))
+                                                : null
+                                        }
+                                    </Select>
+                                </FormControl>
 
-                            <TextField
-                                id="firstName"
-                                name='firstName'
-                                size="small"
-                                label="First Name *"
-                                variant="outlined"
-                                {...register('firstName')}
-                            />
+                                <TextField
+                                    id="firstName"
+                                    name='firstName'
+                                    size="small"
+                                    label="First Name *"
+                                    className='w-48'
+                                    variant="outlined"
+                                    {...register('firstName')}
+                                />
+                            </div>
                             <TextField
                                 id="middleName"
                                 name='middleName'
@@ -263,61 +289,69 @@ function PatientRegistration() {
                                 {...register('lastName')}
                             />
                         </div>
-                        <div className='grid grid-cols-7 gap-2 my-4'>
-                            <TextField
-                                id="dob"
-                                name='dob'
-                                size="small"
-                                label="Date of Birth"
-                                InputLabelProps={{ shrink: true }}
-                                type='date'
-                                variant="outlined"
-                                {...register('dob')}
-                            />
-                            <TextField
-                                id="age"
-                                name='age'
-                                size="small"
-                                label="Age"
-                                variant="outlined"
-                                value={ageDetails.age}
-                                InputProps={{
-                                    readOnly: true,
-                                }}
-                            />
-                            <TextField
-                                id="years"
-                                name='years'
-                                size="small"
-                                label="Years"
-                                variant="outlined"
-                                value={ageDetails.years}
-                                InputProps={{
-                                    readOnly: true,
-                                }}
-                            />
-                            <TextField
-                                id="months"
-                                name='months'
-                                size="small"
-                                label="Months"
-                                variant="outlined"
-                                value={ageDetails.months}
-                                InputProps={{
-                                    readOnly: true,
-                                }}
-                            />
-                            <TextField
-                                id="days"
-                                name='days'
-                                size="small"
-                                label="Days"
-                                variant="outlined"
-                                value={ageDetails.days}
-                                InputProps={{
-                                    readOnly: true,
-                                }}
-                            />
+                        <div className='grid grid-cols-3 gap-2 my-4'>
+                            <div className='flex  justify-around  gap-2'>
+                                <TextField
+                                    id="dob"
+                                    name='dob'
+                                    size="small"
+                                    label="Date of Birth"
+                                    className='w-48'
+
+                                    InputLabelProps={{ shrink: true }}
+                                    type='date'
+                                    variant="outlined"
+                                    {...register('dob')}
+                                />
+                                <TextField
+                                    id="age"
+                                    name='age'
+                                    size="small"
+                                    label="Age"
+                                    className='w-48'
+
+                                    variant="outlined"
+                                    value={ageDetails.age}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                            </div>
+                            <div className='flex justify-around space-x-3'>
+                                <TextField
+                                    id="years"
+                                    name='years'
+                                    size="small"
+                                    label="Years"
+                                    variant="outlined"
+                                    value={ageDetails.years}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                                <TextField
+                                    id="months"
+                                    name='months'
+                                    size="small"
+                                    label="Months"
+                                    variant="outlined"
+                                    value={ageDetails.months}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                                <TextField
+                                    id="days"
+                                    name='days'
+                                    size="small"
+                                    label="Days"
+                                    variant="outlined"
+                                    value={ageDetails.days}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                            </div>
                             <FormControl>
                                 <InputLabel id="gender-label">Gender</InputLabel>
                                 <Select
@@ -326,7 +360,6 @@ function PatientRegistration() {
                                     name='gender'
                                     label="Gender"
                                     size='small'
-                                    className='min-w-[120px]'
                                 >
                                     {
                                         gender?.map((item, index) => (
@@ -338,33 +371,37 @@ function PatientRegistration() {
 
 
                         </div>
-                        <div className='grid grid-cols-5 gap-4'>
-                            <FormControl>
-                                <InputLabel id="isd-label">ISD*</InputLabel>
-                                <Select
-                                    labelId="isd-label"
-                                    id="isd"
-                                    name='isd'
-                                    label="ISD*"
-                                    size='small'
-                                    className='min-w-[120px]'
-                                    {...register('isd')}
-                                >
-                                    {
-                                        isd?.map((item, index) => (
-                                            <MenuItem onClick={() => { handleIsd(item.value, item.id) }} key={index} value={item.value}>{item.name}</MenuItem>
-                                        ))
-                                    }
-                                </Select>
-                            </FormControl>
-                            <TextField
-                                id="mobile"
-                                name='mobile'
-                                size="small"
-                                label="Mobile *"
-                                variant="outlined"
-                                {...register('mobile')}
-                            />
+                        <div className='grid grid-cols-3 gap-4'>
+                            <div className='flex justify-around  space-x-8'>
+                                <FormControl>
+                                    <InputLabel id="isd-label">ISD*</InputLabel>
+                                    <Select
+                                        labelId="isd-label"
+                                        id="isd"
+                                        name='isd'
+                                        label="ISD*"
+                                        size='small'
+                                        className='w-48'
+                                        {...register('isd')}
+                                    >
+                                        {
+                                            isd?.map((item, index) => (
+                                                <MenuItem onClick={() => { handleIsd(item.value, item.id) }} key={index} value={item.value}>{item.name}</MenuItem>
+                                            ))
+                                        }
+                                    </Select>
+                                </FormControl>
+                                <TextField
+                                    id="mobile"
+                                    name='mobile'
+                                    size="small"
+                                    label="Mobile *"
+                                    className='w-52'
+
+                                    variant="outlined"
+                                    {...register('mobile')}
+                                />
+                            </div>
                             <FormControl>
                                 <InputLabel id="maritalStatus-label">Marital Status</InputLabel>
                                 <Select
@@ -372,8 +409,8 @@ function PatientRegistration() {
                                     id="maritalStatus"
                                     name='maritalStatus'
                                     label="Marital Status"
+
                                     size='small'
-                                    className='min-w-[120px]'
                                     {...register('maritalStatus')}
                                 >
                                     {
@@ -383,49 +420,52 @@ function PatientRegistration() {
                                     }
                                 </Select>
                             </FormControl>
-                            <FormControl>
-                                <InputLabel id="nationality-label">Nationality</InputLabel>
-                                <Select
-                                    labelId="nationality-label"
-                                    id="nationality"
-                                    name='nationality'
-                                    label="Nationality"
-                                    size='small'
-                                    className='min-w-[120px]'
-                                    {...register('nationality')}
-                                >
-                                    {
-                                        nationality.map((item, index) => (
-                                            <MenuItem onClick={() => { handleNationality(item.value, item.id) }} key={index} value={item.value}>{item.name}</MenuItem>
-                                        ))
-                                    }
-                                </Select>
-                            </FormControl>
-                            <FormControl>
-                                <InputLabel id="bloodGroup-label">Blood Group</InputLabel>
-                                <Select
-                                    labelId="bloodGroup-label"
-                                    id="bloodGroup"
-                                    name='bloodGroup'
-                                    label="Blood Group"
-                                    size='small'
-                                    className='min-w-[120px]'
-                                    {...register('bloodGroup')}
-                                >
-                                    {
-                                        blood?.map((item, index) => (
-                                            <MenuItem onClick={() => { handleAddBloodGroup(item.value, item.id) }} key={index} value={item.value}>{item.name}</MenuItem>
-                                        ))
-                                    }
-                                </Select>
-                            </FormControl>
+                            <div className='flex justify-stretch gap-3 '>
+                                <FormControl>
+                                    <InputLabel id="nationality-label">Nationality</InputLabel>
+                                    <Select
+                                        labelId="nationality-label"
+                                        id="nationality"
+                                        name='nationality'
+                                        label="Nationality"
+                                        size='small'
+                                        className='w-48'
+                                        {...register('nationality')}
+                                    >
+                                        {
+                                            nationality.map((item, index) => (
+                                                <MenuItem onClick={() => { handleNationality(item.value, item.id) }} key={index} value={item.value}>{item.name}</MenuItem>
+                                            ))
+                                        }
+                                    </Select>
+                                </FormControl>
+                                <FormControl>
+                                    <InputLabel id="bloodGroup-label">Blood Group</InputLabel>
+                                    <Select
+                                        labelId="bloodGroup-label"
+                                        id="bloodGroup"
+                                        name='bloodGroup'
+                                        label="Blood Group"
+                                        size='small'
+                                        className='w-48'
+
+                                        {...register('bloodGroup')}
+                                    >
+                                        {
+                                            blood?.map((item, index) => (
+                                                <MenuItem onClick={() => { handleAddBloodGroup(item.value, item.id) }} key={index} value={item.value}>{item.name}</MenuItem>
+                                            ))
+                                        }
+                                    </Select>
+                                </FormControl>
+                            </div>
                         </div>
                     </div>
                     {/* Patient Basic Information Close */}
                     {/* Address Details */}
                     <div>
-                        <h1 className='p-2 font-medium'>Address Details</h1>
-                        <div className='grid grid-cols-4 gap-4 p-2'>
+                        <h1 className='font-bold'>Address Details</h1>
+                        <div className='grid grid-cols-4 gap-2 my-4 '>
                             <TextField
                                 id="houseNo"
                                 size="small"
@@ -444,16 +484,23 @@ function PatientRegistration() {
                                 <InputLabel id="country-label">Country</InputLabel>
                                 <Select
                                     labelId="country-label"
-                                    id="country"
                                     label="Country"
-                                    size='small'
+                                    size="small"
                                     className="min-w-[200px]"
                                     {...register('country')}
                                 >
-                                    <MenuItem value="India">India</MenuItem>
-                                    <MenuItem value="Other">Other</MenuItem>
+                                    {
+                                        country.map((item) => {
+                                            return (
+                                                <MenuItem onClick={() => handleAddCountry(item.value, item.id)} value={item.id}>{item.name}</MenuItem>
+                                            )
+
+                                        })
+                                    }
                                 </Select>
+
                             </FormControl>
+
                             <FormControl>
                                 <InputLabel id="state-label">State</InputLabel>
                                 <Select
@@ -469,28 +516,31 @@ function PatientRegistration() {
                                 </Select>
                             </FormControl>
                         </div>
-                        <div className='grid grid-cols-4 gap-4 p-2'>
-                            <FormControl>
-                                <InputLabel id="district-label">District</InputLabel>
-                                <Select
-                                    labelId="district-label"
-                                    id="district"
-                                    label="District"
-                                    size='small'
-                                    className="min-w-[200px]"
-                                    {...register('district')}
-                                >
-                                    <MenuItem value="District1">District1</MenuItem>
-                                    <MenuItem value="District2">District2</MenuItem>
-                                </Select>
-                            </FormControl>
-                            <TextField
-                                id="pincode"
-                                size="small"
-                                label="Pincode*"
-                                variant="outlined"
-                                {...register('pincode')}
-                            />
+                        <div className='grid grid-cols-4 gap-2 my-4 '>
+                            <div className='flex justify-around gap-2  '>
+                                <FormControl>
+                                    <InputLabel id="district-label">District</InputLabel>
+                                    <Select
+                                        labelId="district-label"
+                                        id="district"
+                                        label="District"
+                                        size='small'
+                                        className='w-36'
+                                        {...register('district')}
+                                    >
+                                        <MenuItem value="District1">District1</MenuItem>
+                                        <MenuItem value="District2">District2</MenuItem>
+                                    </Select>
+                                </FormControl>
+                                <TextField
+                                    id="pincode"
+                                    size="small"
+                                    className='w-36'
+                                    label="Pincode*"
+                                    variant="outlined"
+                                    {...register('pincode')}
+                                />
+                            </div>
                             <FormControl>
                                 <InputLabel id="area-label">Area</InputLabel>
                                 <Select
@@ -498,7 +548,6 @@ function PatientRegistration() {
                                     id="area"
                                     label="Area"
                                     size='small'
-                                    className="min-w-[200px]"
                                     {...register('area')}
                                 >
                                     <MenuItem value="Area1">Area1</MenuItem>
@@ -535,7 +584,7 @@ function PatientRegistration() {
                             </FormControl>
                         </div>
                     </div>
-                    <div className='text-center my-2'>
+                    <div className='text-center  my-6'>
                         <Button className='h-10 w-16' type='submit' variant='contained'>Submit</Button>
                     </div>
                 </div>
