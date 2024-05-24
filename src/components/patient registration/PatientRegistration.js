@@ -2,11 +2,11 @@ import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@m
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { BloodGroupApi, GenderApi, IsdApi, MarriedStatusApi, NationalityApi, PrefixApi, countryApi } from '../../services/PatientRegistration';
+import { BloodGroupApi, GenderApi, IsdApi, MarriedStatusApi, NationalityApi, PrefixApi, countryApi, stateApi } from '../../services/PatientRegistration';
 import { API_COMMON_URL } from '../../http';
 
 function PatientRegistration() {
-    const { register, handleSubmit, reset, watch } = useForm();
+    const { register, handleSubmit, reset, watch, setValue } = useForm();
     const [prefix, setPrefix] = useState([]);
     const [isd, setIsd] = useState([]);
     const [marriedStatus, setMarriedStatus] = useState([]);
@@ -14,8 +14,9 @@ function PatientRegistration() {
     const [blood, setBlood] = useState([]);
     const [nationality, setNationality] = useState([]);
     const [country, setCountry] = useState([])
+    const [state, setState] = useState([]);
     console.log("country", country);
-
+    const [district, setDistrict] = useState([]);
 
 
     const [prefixName, setPrefixName] = useState({});
@@ -25,6 +26,8 @@ function PatientRegistration() {
     const [nationalityName, setNationalityName] = useState({})
     const [isdCode, setIsdCode] = useState({});
     const [countryName, setCountryName] = useState({});
+    const [stateName, setStateName] = useState({});
+    const [districtName, setDistrictName] = useState({});
 
 
 
@@ -52,7 +55,7 @@ function PatientRegistration() {
         return { age: years, years, months, days };
     };
 
-    const onSubmit = async (data) => {
+    const onSubmit = (data) => {
 
 
         let tempObj = {
@@ -90,17 +93,11 @@ function PatientRegistration() {
             mob: data?.mobile,
         };
 
-        try {
-            const res = await axios.post(`${API_COMMON_URL}/registration/saveUser`, tempObj);
-            console.log(res.data);
-            reset(); // Reset the form after successful submission
-        } catch (error) {
-            console.error(error);
-        }
+        setValue('prefix', null)
+
     };
 
     const dob = watch('dob');
-
     const ageDetails = dob ? calculateAge(dob) : { age: '', years: '', months: '', days: '' };
 
     const handleAddPrefix = (value, id) => {
@@ -126,7 +123,15 @@ function PatientRegistration() {
     const handleAddCountry = (value, id) => {
         setCountryName({ value: value, id: id })
     }
-    // get apis
+    const handleAddState = (value, id) => {
+        setStateName({ value: value, id: id })
+        console.log("id", id);
+    }
+    const handleAddDistrict = (value, id) => {
+        setDistrictName({ value: value, id: id })
+    }
+
+    // patient  registraion  get apis
     useEffect(() => {
         // preFix api
         PrefixApi()
@@ -177,12 +182,7 @@ function PatientRegistration() {
             .catch((error) => {
                 console.log(error)
             })
-
-
-    }, []);
-
-    useEffect(() => {
-        // countryApi
+        //
         countryApi()
             .then((res) => {
                 setCountry(res)
@@ -191,7 +191,30 @@ function PatientRegistration() {
                 console.log(error)
             })
 
-    }, [])
+    }, []);
+    // address details api 
+    useEffect(() => {
+        if (countryName) {
+            axios.get(`http://192.168.0.188:8080/fn_state_dropdown/${countryName?.id}`)
+                .then((res) => {
+                    setState(res.data)
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+        }
+    }, [countryName])
+    useEffect(() => {
+        if (stateName) {
+            axios.get(`http://192.168.0.188:8080/fnDistrictDropdown/${stateName?.id}`)
+                .then((res) => {
+                    setDistrict(res.data)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        }
+    }, [stateName])
 
 
     return (
@@ -202,7 +225,6 @@ function PatientRegistration() {
             <div className="shadow-2xl p-2 rounded">
 
                 <div>
-
                     {/* Patient Basic Information */}
                     <h1 className='font-bold  '>Patient Basic Information</h1>
                     <div className=''>
@@ -244,6 +266,7 @@ function PatientRegistration() {
                                     <Select
                                         labelId="prefix-label"
                                         id="prefix"
+                                        defaultValue={prefix}
                                         name='prefix'
                                         label="Prefix*"
                                         size='small'
@@ -492,9 +515,8 @@ function PatientRegistration() {
                                     {
                                         country.map((item) => {
                                             return (
-                                                <MenuItem onClick={() => handleAddCountry(item.value, item.id)} value={item.id}>{item.name}</MenuItem>
+                                                <MenuItem onClick={() => handleAddCountry(item.value, item.id)} value={item.id}>{item.label}</MenuItem>
                                             )
-
                                         })
                                     }
                                 </Select>
@@ -511,8 +533,11 @@ function PatientRegistration() {
                                     className="min-w-[200px]"
                                     {...register('state')}
                                 >
-                                    <MenuItem value="State1">State1</MenuItem>
-                                    <MenuItem value="State2">State2</MenuItem>
+                                    {
+                                        state.map((item) => (
+                                            <MenuItem onClick={() => handleAddState(item.id, item.value)} value={item.id}>{item.label}</MenuItem>
+                                        ))
+                                    }
                                 </Select>
                             </FormControl>
                         </div>
@@ -528,8 +553,11 @@ function PatientRegistration() {
                                         className='w-36'
                                         {...register('district')}
                                     >
-                                        <MenuItem value="District1">District1</MenuItem>
-                                        <MenuItem value="District2">District2</MenuItem>
+                                        {
+                                            district.map((item) => (
+                                                <MenuItem onClick={() =>handleAddDistrict(item.id, item.value)} value={item.id}>{item.label}</MenuItem>
+                                            ))
+                                        }
                                     </Select>
                                 </FormControl>
                                 <TextField

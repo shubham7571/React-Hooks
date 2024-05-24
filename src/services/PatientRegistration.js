@@ -1,5 +1,5 @@
 import axios from "axios"
-import { API_COMMON_URL } from "../http"
+import { ADDRESS_COMMON_URL, API_COMMON_URL } from "../http"
 //prefixapi
 export const PrefixApi = async () => {
     let res = await axios.get(`${API_COMMON_URL}/prefixDropdown`)
@@ -19,17 +19,24 @@ export const GenderApi = async () => {
 export const BloodGroupApi = async () => {
     let res = await axios.get(`${API_COMMON_URL}/getBloodGroupDropDown`)
     return res.data
+
 }
+// nationality api 
 export const NationalityApi = async () => {
     let res = await axios.get(`${API_COMMON_URL}/getNationalityDropdown`)
     return res.data
 }
+//isdapi
 export const IsdApi = async () => {
     let res = await axios.get(`${API_COMMON_URL}/getIsdCodeDropdown`)
     return res.data
 }
 
+
+// country api
 export const countryApi = async () => {
-    let res = await axios.get('http://192.168.0.188:8080/countries')
+    let res = await axios.get(`${ADDRESS_COMMON_URL}/countries`)
     return res.data
 }
+ 
+  

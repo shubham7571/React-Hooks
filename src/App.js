@@ -85,6 +85,7 @@ import FindIndex from "./components/arraymethod/FindIndex";
 import Includes from "./components/arraymethod/Includes";
 import CrudOperation from "./components/hookform/crudOperation/CrudOperation";
 import PatientRegistration from "./components/patient registration/PatientRegistration";
+import PdfTask from "./components/pdftask/PdfTask";
 import Axios from "./components/reacthookform/axios/Axios";
 import Rough from "./components/reacthookform/timeset/Rough";
 import TimeSet from "./components/reacthookform/timeset/TimeSet";
@@ -189,7 +190,7 @@ function App() {
             {/* <Rough/> */}
             {/* <UseReducer/> */}
             {/* <Axios/> */}
-            <PatientRegistration/>
+            {/* <PatientRegistration/> */}
 
 
             {/* array method */}
@@ -197,6 +198,7 @@ function App() {
             {/* <FindIndex/> */}
             {/* <Find/> */}
             {/* <Includes/> */}
+            <PdfTask/>
         </div>
 
     );
