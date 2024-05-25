@@ -48,9 +48,12 @@ export default function CrudOperation() {
     };
     //Deleting a Row (handleDelete)
     const handleDelete = (index) => {
-        const tempArr = [...tableData];
-        tempArr.splice(index, 1);
-        setTableData(tempArr);
+        // const tempArr = [...tableData];
+        // tempArr.splice(index, 1);
+        // setTableData(tempArr);
+
+        // or filter  method
+        setTableData(tableData.filter((row, i) => i !== index));
     };
     //Handling Input Changes (handleInputChange)
     const handleInputChange = (event) => {
@@ -89,7 +92,7 @@ export default function CrudOperation() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {tableData.map((item, index) => (
+                            {tableData.map((item, index ,row) => (
                                 <TableRow key={index}>
                                     <TableCell align="right">{item.firstName}</TableCell>
                                     <TableCell align="right">{item.middleName}</TableCell>
@@ -97,7 +100,7 @@ export default function CrudOperation() {
                                     <TableCell align="right">{item.address}</TableCell>
                                     <TableCell align="right">
                                         <Button onClick={() => setEditRow(item)}><EditIcon /></Button>
-                                        <Button onClick={() => handleDelete(index)}><DeleteIcon /></Button>
+                                        <Button onClick={() => handleDelete(index,row)}><DeleteIcon /></Button>
                                     </TableCell>
                                 </TableRow>
                             ))}

@@ -179,7 +179,7 @@ function App() {
             {/* <Configuration /> */}
             {/* <Form/> */}
             {/* <YupValidation/> */}
-            {/* <CrudOperation /> */}
+            <CrudOperation />
             {/* <ModalReuseableTable/> */}
             {/* <ReuseableTable /> */}
             {/* <Navbar/> */}
@@ -187,6 +187,7 @@ function App() {
             {/* <Rough/> */}
             {/* <ParrentTab /> */}
             {/* <TimeSet/> */}
+            {/* <PdfTask/> */}
             {/* <Rough/> */}
             {/* <UseReducer/> */}
             {/* <Axios/> */}
@@ -198,7 +199,6 @@ function App() {
             {/* <FindIndex/> */}
             {/* <Find/> */}
             {/* <Includes/> */}
-            <PdfTask/>
         </div>
 
     );

@@ -33,6 +33,8 @@ export const IsdApi = async () => {
 }
 
 
+//address details apis
+
 // country api
 export const countryApi = async () => {
     let res = await axios.get(`${ADDRESS_COMMON_URL}/countries`)

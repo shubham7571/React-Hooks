@@ -390,10 +390,10 @@ const dataDetails = {
 function PdfTask() {
     return (
         <div>
-            <table className='table-fixed border-collapse border border-gray-300'>
+            <table className='table-fixed border-collapse  border-2 border-gray-300'>
                 <thead>
-                    <tr className='border'>
-                        <td className='border p-1 text-center w-32 h-16' rowSpan={2}>resc. Date Time</td>
+                    <tr className='border bg-gray-300 font-bold'>
+                        <td className='border p-1 text-center w-32 h-16' rowSpan={2}>Presc. Date Time</td>
                         <td className='border p-1 text-center w-32 h-16' rowSpan={2}>Start Date</td>
                         <td className='border p-1 text-center w-32 h-16' rowSpan={2}>End Date</td>
                         <td className='border p-1 text-center w-32 h-16' rowSpan={2}>Name Of Medication</td>
@@ -422,7 +422,7 @@ function PdfTask() {
                                     <>
                                         {dateKey.medicationChartTimeDtoList.map((timeKey, index) => (
                                             <td
-                                                className='whitespace-nowrap border text-center w-32 h-16'
+                                                className='whitespace-nowrap bg-gray-300 font-bold border text-center w-32 h-16'
                                                 key={index}
                                             >
                                                 {timeKey.timeSlot}
