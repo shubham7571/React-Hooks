@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 
 export default function Form() {
     const [submit, setsubmit] = useState([])
-    console.log("data",submit);
+    console.log("data", submit);
     const {
         register, handleSubmit
     } = useForm();
@@ -17,10 +17,12 @@ export default function Form() {
     return (
         <div>
             <form onSubmit={handleSubmit(onsubmit)}>
-                <TextField size='small' {...register("fname")} label="fname" />
-                <TextField size='small' {...register("mname")} label="mname" />
-                <TextField size='small' {...register("lname")} label="lname" />
-                <Button type='submit' > save</Button>
+                <div className='space-x-4 m-10 '>
+                    <TextField size='small' {...register("fname")} label="fname" />
+                    <TextField size='small' {...register("mname")} label="mname" />
+                    <TextField size='small' {...register("lname")} label="lname" />
+                    <Button type='submit' > save</Button>
+                </div>
             </form>
         </div>
     )

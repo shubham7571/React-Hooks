@@ -3,8 +3,7 @@ import axios from 'axios';
 import ProfilePhoto from '../assects/ProfilePhoto.webp'
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { BloodGroupApi, GenderApi, IsdApi, MarriedStatusApi, NationalityApi, PrefixApi, countryApi, stateApi } from '../../services/PatientRegistration';
-import { API_COMMON_URL } from '../../http';
+import { BloodGroupApi, GenderApi, IsdApi, MarriedStatusApi, NationalityApi, PrefixApi, cityApi, countryApi, districtApi, stateApi, talukaApi } from '../../services/PatientRegistration';
 
 function PatientRegistration() {
     const { register, handleSubmit, reset, watch, setValue } = useForm();
@@ -99,30 +98,21 @@ function PatientRegistration() {
             lname: data?.lastName,
             mob: data?.mobile,
         };
-        console.log(tempObj)
-        axios.post(`${API_COMMON_URL}/SavePrefix`, tempObj)
-            .then((response) => {
-                console.log(response.data);
-            })
-            .catch((error) => {
-                console.log("Error", error);
-            });
+        console.log('tempObj', tempObj)
+       
 
-        setValue('prefix', null)
-
+        // setValue('prefix', null)
+        reset();
     };
 
     const dob = watch('dob');
     const ageDetails = dob ? calculateAge(dob) : { age: '', years: '', months: '', days: '' };
 
     const handleAddPrefix = (value, id) => {
-
         setPrefixName({ value: value, id: id })
-
     }
     const handleAddGender = (value, id) => {
         setGenderName({ value: value, id: id })
-
     }
     const handleMaritalStatus = (value, id) => {
         setMaritalStatus({ value: value, id: id })
@@ -214,13 +204,13 @@ function PatientRegistration() {
             })
 
     }, []);
-    // address details apis
+    // address details get  apis
     useEffect(() => {
         // state Api
         if (countryName) {
-            axios.get(`http://192.168.0.188:8080/fn_state_dropdown/${countryName?.id}`)
+            stateApi(countryName)
                 .then((res) => {
-                    setState(res.data)
+                    setState(res)
                 })
                 .catch((err) => {
                     console.log(err);
@@ -228,9 +218,9 @@ function PatientRegistration() {
         }
         //District Api
         if (stateName) {
-            axios.get(`http://192.168.0.188:8080/fnDistrictDropdown/${stateName?.id}`)
+            districtApi(stateName)
                 .then((response) => {
-                    setDistrict(response.data)
+                    setDistrict(response)
                 })
                 .catch((err) => {
                     console.log(err)
@@ -238,9 +228,9 @@ function PatientRegistration() {
         }
         //taluka api
         if (districtName) {
-            axios.get(`http://192.168.0.188:8080/getTalukaDropdown/${districtName?.id}`)
+            talukaApi(districtName)
                 .then((response) => {
-                    setTaluka(response.data)
+                    setTaluka(response)
                 })
                 .catch((error) => {
                     console.log(error)
@@ -248,15 +238,14 @@ function PatientRegistration() {
         }
         //city api
         if (talukaName) {
-            axios.get(`http://192.168.0.188:8080/getCityDropdown/${talukaName?.id}`)
+            cityApi(talukaName)
                 .then((response) => {
-                    setCity(response.data)
+                    setCity(response)
                 })
                 .catch((error) => {
                     console.log(error)
                 })
         }
-
     }, [countryName, stateName, districtName, talukaName])
 
 

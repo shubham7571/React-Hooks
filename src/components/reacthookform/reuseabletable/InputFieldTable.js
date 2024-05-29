@@ -19,20 +19,13 @@ function InputFieldTable(props) {
     };
 
     const schema = yup.object().shape({
-        FirstName : yup.string().required("Please enter your first name"),
+        FirstName: yup.string().required("Please enter your first name"),
         MiddleName: yup.string().required("Please enter your middle name"),
         LastName: yup.string().required("Please enter your last name"),
         Address: yup.string().required("Please enter your address"),
     });
 
-    const {
-        reset,
-        formState: { errors },
-        handleSubmit,
-        register
-    } = useForm({
-        resolver: yupResolver(schema),
-    });
+    const {  reset,formState: { errors },handleSubmit,register} = useForm({ resolver: yupResolver(schema),});
 
     const onSubmit = (data) => {
         let tempArr = [...props.loginData];

@@ -56,7 +56,7 @@
 // import UseMemo from "./practics/UseMemo";
 // import Curd from "./components/about/Curd";
 // import Curd from "./components/about/Curd";
-// import TableCurd from "./components/about/TableCurd";
+import TableCurd from "./components/about/TableCurd";
 
 // import InputFiledTask from "./components/task/InputFiledTask";
 // import Delete from "./components/DeteleObject";
@@ -68,11 +68,11 @@
 // reacthookfrom
 // import TableFrom from "./components/reacthookform/TableFrom";
 // import ParentComponent from "./components/reacthookform/Props/ParentComponent"
-// import Form from "./components/hookform/Form";
+import Form from "./components/hookform/Form";
 // import YupValidation from "./components/hookform/yupvalidation/YupValidation";
 // import Configuration from "./components/reacthookform/totalPriceGst/Configuration";
 // import CrudOperation from "./components/hookform/crudOperation/CrudOperation";
-// import ReuseableTable from "./components/reacthookform/reuseabletable/ReuseableTable";
+import ReuseableTable from "./components/reacthookform/reuseabletable/ReuseableTable";
 // import Navbar from "./components/reacthookform/reuseableTask/Navbar";
 // import UseRef from "./components/reacthookform/keyUpDown/UseRef";
 // import TableFrom from "./components/reacthookform/totalPriceGst/TableForm"
@@ -90,14 +90,16 @@ import Axios from "./components/reacthookform/axios/Axios";
 import Rough from "./components/reacthookform/timeset/Rough";
 import TimeSet from "./components/reacthookform/timeset/TimeSet";
 import UseReducer from "./components/reacthookform/useReducer/UseReducer";
+import UseFormPatientRegistration from "./components/patient registration/UseFormPatientRegistration";
+import PasswordShow from "./components/hookform/passwordform/PasswordShow";
 function App() {
     // const [text,setText] =useState("")
     // const [data,setdata] = useState(prop);
-    
+
 
     return (
         <div>
-            
+
             {/* <NewContext.Provider value={{text,setText}}>
                 {text}
                 <MyContext/>
@@ -174,12 +176,19 @@ function App() {
             {/* <TableFrom /> */}
             {/* <ParentComponent/> */}
             {/* <TableForm/>  */}
+            {/* <PasswordShow /> */}
+
+            {/* array method */}
+            {/* <FilterMethod/> */}
+            {/* <FindIndex/> */}
+            {/* <Find/> */}
+            {/* <Includes/> */}
 
 
             {/* <Configuration /> */}
             {/* <Form/> */}
             {/* <YupValidation/> */}
-            <CrudOperation />
+            {/* <CrudOperation /> */}
             {/* <ModalReuseableTable/> */}
             {/* <ReuseableTable /> */}
             {/* <Navbar/> */}
@@ -192,13 +201,10 @@ function App() {
             {/* <UseReducer/> */}
             {/* <Axios/> */}
             {/* <PatientRegistration/> */}
+            <UseFormPatientRegistration/>
 
 
-            {/* array method */}
-            {/* <FilterMethod/> */}
-            {/* <FindIndex/> */}
-            {/* <Find/> */}
-            {/* <Includes/> */}
+
         </div>
 
     );

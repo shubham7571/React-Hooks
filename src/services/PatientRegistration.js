@@ -40,5 +40,21 @@ export const countryApi = async () => {
     let res = await axios.get(`${ADDRESS_COMMON_URL}/countries`)
     return res.data
 }
- 
+export const stateApi = async(countryName)=>{
+    let res = await axios.get(`${ADDRESS_COMMON_URL}/fn_state_dropdown/${countryName?.id}`)
+    return res.data
+}
+export const  districtApi = async(stateName)=>{
+    let res = await axios.get(`${ADDRESS_COMMON_URL}/fnDistrictDropdown/${stateName?.id}`)
+    return res.data
+}
+export const  talukaApi = async(districtName)=>{
+    let res = await axios.get(`${ADDRESS_COMMON_URL}/getTalukaDropdown/${districtName?.id}`)
+    return res.data
+}
+export const   cityApi = async(talukaName)=>{
+    let res = await axios.get(`${ADDRESS_COMMON_URL}/getCityDropdown/${talukaName?.id}`)
+    return res.data
+}
   
+ 
