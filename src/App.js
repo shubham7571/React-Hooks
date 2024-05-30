@@ -184,7 +184,7 @@ function App() {
             {/* <FindIndex/> */}
             {/* <Find/> */}
             {/* <Includes/> */}
-            <HookFormTask/>
+            {/* <HookFormTask/> */}
 
 
             {/* <Configuration /> */}
@@ -203,7 +203,7 @@ function App() {
             {/* <UseReducer/> */}
             {/* <Axios/> */}
             {/* <PatientRegistration/> */}
-            {/* <UseFormPatientRegistration/> */}
+            <UseFormPatientRegistration/>
 
 
 
