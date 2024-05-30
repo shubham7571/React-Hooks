@@ -92,6 +92,7 @@ import TimeSet from "./components/reacthookform/timeset/TimeSet";
 import UseReducer from "./components/reacthookform/useReducer/UseReducer";
 import UseFormPatientRegistration from "./components/patient registration/UseFormPatientRegistration";
 import PasswordShow from "./components/hookform/passwordform/PasswordShow";
+import HookFormTask from "./components/hookform/HookFormTask";
 function App() {
     // const [text,setText] =useState("")
     // const [data,setdata] = useState(prop);
@@ -183,6 +184,7 @@ function App() {
             {/* <FindIndex/> */}
             {/* <Find/> */}
             {/* <Includes/> */}
+            <HookFormTask/>
 
 
             {/* <Configuration /> */}
@@ -201,7 +203,7 @@ function App() {
             {/* <UseReducer/> */}
             {/* <Axios/> */}
             {/* <PatientRegistration/> */}
-            <UseFormPatientRegistration/>
+            {/* <UseFormPatientRegistration/> */}
 
 
 

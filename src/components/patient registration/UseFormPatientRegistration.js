@@ -11,6 +11,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function UseFormPatientRegistration() {
     const [open, setOpen] = React.useState(false);
@@ -39,6 +40,7 @@ function UseFormPatientRegistration() {
             percentage: data?.percentage
         }
         console.log("tempObj", tempObj)
+
         reset();
     }
     useEffect(() => {
@@ -148,9 +150,9 @@ function UseFormPatientRegistration() {
                                                 {item.percentage}
                                             </TableCell>
                                             <TableCell  >
-
                                             </TableCell>
-
+                                            <Button> <EditIcon /></Button>
+                                            <Button> <DeleteIcon /></Button>
                                         </TableRow>
                                     ))
                                 }
@@ -161,8 +163,10 @@ function UseFormPatientRegistration() {
 
                 </div>
             ) : (
-                <p>No data found</p>
-           )}
+                <div className='text-center font-bold text-xl'>
+                    <p >No data found....</p>
+                </div>
+            )}
         </div>
     )
 }
