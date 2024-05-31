@@ -93,6 +93,7 @@ import UseReducer from "./components/reacthookform/useReducer/UseReducer";
 import UseFormPatientRegistration from "./components/patient registration/UseFormPatientRegistration";
 import PasswordShow from "./components/hookform/passwordform/PasswordShow";
 import HookFormTask from "./components/hookform/HookFormTask";
+import YupValidationForm from "./components/hookform/yupvalidation/YupValidationForm";
 function App() {
     // const [text,setText] =useState("")
     // const [data,setdata] = useState(prop);
@@ -190,6 +191,7 @@ function App() {
             {/* <Configuration /> */}
             {/* <Form/> */}
             {/* <YupValidation/> */}
+            <YupValidationForm/>
             {/* <CrudOperation /> */}
             {/* <ModalReuseableTable/> */}
             {/* <ReuseableTable /> */}
@@ -203,7 +205,7 @@ function App() {
             {/* <UseReducer/> */}
             {/* <Axios/> */}
             {/* <PatientRegistration/> */}
-            <UseFormPatientRegistration/>
+            {/* <UseFormPatientRegistration/> */}
 
 
 

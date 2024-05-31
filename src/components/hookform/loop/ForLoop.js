@@ -23,7 +23,7 @@ function ReactHookForm() {
         console.log("data from the form is :", data);
         let dataArray = [...tableData];
         let tableObject = {
-            "First Name": data?.firstName,
+            "First Name": data?.firstName,   //backendkey :parameter ?. frontendkey
             "Last Name": data?.lastName,
             Age: data?.Age,
         };
@@ -169,7 +169,7 @@ function ReactHookForm() {
     React.useEffect(() => {
 
 
-        // this  simpe for loop use for specific object add the key and values
+        // this  simple for loop use for specific object add the key and values
         for (let i = 0; i <= arr?.length; i++) {
             console.log("what is i", i);
             if (i === 2) {
@@ -178,7 +178,7 @@ function ReactHookForm() {
             }
         }
 
-        //for of use for  all objects add in the keys 
+        //for of use for  all objects add in the keys and values
         for (let object of arr) {
             object.b = 4;
             // console.log("what is i",i);

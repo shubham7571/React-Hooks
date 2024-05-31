@@ -29,7 +29,7 @@ function UseFormPatientRegistration() {
     const [selectedRow, setSelectedRow] = useState(null);
     const { reset, handleSubmit, register, setValue } = useForm();
     const [data, setData] = useState([]);
-    
+
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
         setOpen(false);

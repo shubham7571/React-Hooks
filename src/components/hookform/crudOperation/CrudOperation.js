@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
+import { Box, Button, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 700,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+};
 export default function CrudOperation() {
+    const [open, setOpen] = useState(false);
     const [tableData, setTableData] = useState([]);
     const [editRow, setEditRow] = useState(null);
     const [formData, setFormData] = useState({
@@ -12,10 +22,11 @@ export default function CrudOperation() {
         lastName: '',
         address: ''
     });
-    //useEffect Hook
+
     useEffect(() => {
         if (editRow !== null) {
             setFormData(editRow);
+            setOpen(true);
         } else {
             setFormData({
                 firstName: '',
@@ -25,7 +36,7 @@ export default function CrudOperation() {
             });
         }
     }, [editRow]);
-    //Form Submission (handleSubmit)
+
     const handleSubmit = (event) => {
         event.preventDefault();
         let tempArr = [...tableData];
@@ -45,17 +56,23 @@ export default function CrudOperation() {
             lastName: '',
             address: ''
         });
+        setOpen(false);
     };
-    //Deleting a Row (handleDelete)
-    const handleDelete = (index) => {
-        // const tempArr = [...tableData];
-        // tempArr.splice(index, 1);
-        // setTableData(tempArr);
 
-        // or filter  method
+    const handleOpen = () => {
+        setOpen(true);
+        setEditRow(null);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        setEditRow(null);
+    };
+
+    const handleDelete = (index) => {
         setTableData(tableData.filter((row, i) => i !== index));
     };
-    //Handling Input Changes (handleInputChange)
+
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setFormData(prevData => ({
@@ -63,22 +80,32 @@ export default function CrudOperation() {
             [name]: value
         }));
     };
-    //Rendering the Form and Table
+
     return (
         <div>
-            <form onSubmit={handleSubmit}>
-                <div className="my-20 text-center justify-center flex space-x-2">
-                    <div><TextField size='small' label="First Name" name='firstName' value={formData.firstName} onChange={handleInputChange} /></div>
-                    <div><TextField size='small' label="Middle Name" name='middleName' value={formData.middleName} onChange={handleInputChange} /></div>
-                    <div><TextField size='small' label="Last Name" name='lastName' value={formData.lastName} onChange={handleInputChange} /></div>
-                    <div><TextField size='small' label="Address" name='address' value={formData.address} onChange={handleInputChange} /></div>
-                    <div>
-                        <Button variant='contained' size='small' className='h-10 w-20' type='submit'>
-                            {editRow === null ? 'Add' : 'Update'}
-                        </Button>
-                    </div>
+            <div className='text-end m-10 '>
+                <Button variant='contained' onClick={handleOpen}>ADD NEW</Button>
+            </div>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <div className="">
+                    <Box sx={style}>
+                        <form onSubmit={handleSubmit} className=" my-10 text-center justify-center flex space-x-2">
+                            <TextField size='small' label="First Name" name='firstName' value={formData.firstName} onChange={handleInputChange} />
+                            <TextField size='small' label="Middle Name" name='middleName' value={formData.middleName} onChange={handleInputChange} />
+                            <TextField size='small' label="Last Name" name='lastName' value={formData.lastName} onChange={handleInputChange} />
+                            <TextField size='small' label="Address" name='address' value={formData.address} onChange={handleInputChange} />
+                            <Button variant='contained' size='small' className='h-10 w-20' type='submit'>
+                                {editRow === null ? 'Add' : 'Update'}
+                            </Button>
+                        </form>
+                    </Box>
                 </div>
-            </form>
+            </Modal>
             {tableData.length > 0 ? (
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -92,7 +119,7 @@ export default function CrudOperation() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {tableData.map((item, index ,row) => (
+                            {tableData.map((item, index) => (
                                 <TableRow key={index}>
                                     <TableCell align="right">{item.firstName}</TableCell>
                                     <TableCell align="right">{item.middleName}</TableCell>
@@ -100,7 +127,7 @@ export default function CrudOperation() {
                                     <TableCell align="right">{item.address}</TableCell>
                                     <TableCell align="right">
                                         <Button onClick={() => setEditRow(item)}><EditIcon /></Button>
-                                        <Button onClick={() => handleDelete(index,row)}><DeleteIcon /></Button>
+                                        <Button onClick={() => handleDelete(index)}><DeleteIcon /></Button>
                                     </TableCell>
                                 </TableRow>
                             ))}
