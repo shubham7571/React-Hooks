@@ -96,6 +96,7 @@ function UseFormPatientRegistration() {
         handleOpen();
     };
 
+    // delete the data
     const handleDelete = (id) => {
         axios.delete(`http://192.168.138.12:8080/deleteStudent/${id}`)
             .then(() => {

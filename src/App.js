@@ -191,7 +191,7 @@ function App() {
             {/* <Configuration /> */}
             {/* <Form/> */}
             {/* <YupValidation/> */}
-            <YupValidationForm/>
+            {/* <YupValidationForm/> */}
             {/* <CrudOperation /> */}
             {/* <ModalReuseableTable/> */}
             {/* <ReuseableTable /> */}
@@ -204,7 +204,7 @@ function App() {
             {/* <Rough/> */}
             {/* <UseReducer/> */}
             {/* <Axios/> */}
-            {/* <PatientRegistration/> */}
+            <PatientRegistration/>
             {/* <UseFormPatientRegistration/> */}
 
 

@@ -46,7 +46,7 @@ function YupValidationForm() {
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
         setOpen(false);
-        reset(); // empty the text fields or form
+        reset();
     };
     const handleConfirmOpen = (index) => {
         setDeleteIndex(index);
@@ -56,12 +56,12 @@ function YupValidationForm() {
 
     // Yup Validation
     const schema = yup.object({
-        firstname: yup.string().required("Please enter your first name"),
-        lastname: yup.string().required("Please enter your last name"),
-        age: yup.number().required("Please enter your age"),
-        address: yup.string().required("Please enter your address"),
-        mobileno: yup.string().required("Please enter your mobile number"),
-        email: yup.string().email("Invalid email").required("Please enter your email")
+        firstname: yup.string().required('First name is required'),
+        lastname: yup.string().required('Last name is required'),
+        mobileno: yup.string().matches(/^\d{10,12}$/, 'Mobile number must be between 10 and 12 digits').required('Mobile number is required'),
+        email: yup.string().email('Invalid email format').required('Email is required'),
+        age: yup.number().required('Age is required').positive('Age must be a positive number').integer('Age must be an integer'),
+        address: yup.string().required('Address is required'),
     }).required();
 
     const { reset, handleSubmit, register, setValue, formState: { errors } } = useForm({
@@ -87,16 +87,16 @@ function YupValidationForm() {
             let tableObject = {
                 "First Name": data.firstname,
                 "Last Name": data.lastname,
+                "Mobile No": data.mobileno,
+                "Email": data.email,
                 "Age": data.age,
                 "Address": data.address,
-                "Mobile No": data.mobileno,
-                "Email": data.email
             };
             tempObj.push(tableObject);
             setTableData(tempObj);
         }
-        reset(); // empty the text fields or form
-        handleClose(); // close the modal
+        reset();
+        handleClose();
     };
 
     const handleEdit = (index) => {
@@ -130,7 +130,7 @@ function YupValidationForm() {
     return (
         <div>
             <div className='text-end m-10'>
-                <Button onClick={handleOpen} variant='contained'>Open modal</Button>
+                <button onClick={handleOpen} className='bg-black h-10 w-28 rounded  text-white' >Open Modal</button>
             </div>
             <Modal
                 open={open}
@@ -162,7 +162,7 @@ function YupValidationForm() {
                                 variant="outlined"
                                 {...register('firstname')}
                                 error={!!errors.firstname}
-                                helperText={errors.firstname?.message}
+                                // helperText={errors.firstname?.message}
                             />
                             <TextField
                                 label="Last Name"
@@ -170,23 +170,7 @@ function YupValidationForm() {
                                 variant="outlined"
                                 {...register('lastname')}
                                 error={!!errors.lastname}
-                                helperText={errors.lastname?.message}
-                            />
-                            <TextField
-                                label="Age"
-                                size='small'
-                                variant="outlined"
-                                {...register('age')}
-                                error={!!errors.age}
-                                helperText={errors.age?.message}
-                            />
-                            <TextField
-                                label="Address"
-                                size='small'
-                                variant="outlined"
-                                {...register('address')}
-                                error={!!errors.address}
-                                helperText={errors.address?.message}
+                                // helperText={errors.lastname?.message}
                             />
                             <TextField
                                 label="Mobile No"
@@ -194,7 +178,7 @@ function YupValidationForm() {
                                 variant="outlined"
                                 {...register('mobileno')}
                                 error={!!errors.mobileno}
-                                helperText={errors.mobileno?.message}
+                                // helperText={errors.mobileno?.message}
                             />
                             <TextField
                                 label="Email"
@@ -202,9 +186,24 @@ function YupValidationForm() {
                                 variant="outlined"
                                 {...register('email')}
                                 error={!!errors.email}
-                                helperText={errors.email?.message}
+                                // helperText={errors.email?.message}
                             />
-                            
+                            <TextField
+                                label="Age"
+                                size='small'
+                                variant="outlined"
+                                {...register('age')}
+                                error={!!errors.age}
+                                // helperText={errors.age?.message}
+                            />
+                            <TextField
+                                label="Address"
+                                size='small'
+                                variant="outlined"
+                                {...register('address')}
+                                error={!!errors.address}
+                                // helperText={errors.address?.message}
+                            />
                         </div>
                         <div className='text-end'>
                             <button type="submit" className='bg-black h-10 w-16 rounded font-semibold text-white'>SAVE</button>

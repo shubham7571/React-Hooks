@@ -15,7 +15,7 @@ function ReactHookForm() {
         mode: "onChange",
     });
 
-    const [tableData, setTableData] = React.useState([]); 
+    const [tableData, setTableData] = React.useState([]);
     //use for table head 
     const [tableHeaders, setTableHeaders] = React.useState([]);
 
@@ -49,7 +49,7 @@ function ReactHookForm() {
     // console.log("object", Object.keys(object));   // find the only  key name  output is a,b,c
     // console.log("object1", Object.values(object));    // find the only values output is 1,2,3
 
-    console.log("value of object by key", object["a"]); 
+    console.log("value of object by key", object["a"]);
 
     React.useEffect(() => {
         if (tableData?.length > 0) {
@@ -185,12 +185,50 @@ function ReactHookForm() {
             console.log("1111111", arr);
         }
 
-        // 
+        //for each loop
         // demoArray.forEach((item, index) => {
         //   // console.log("what is i",i);
-        //   console.log("demoArray", object);
+        //   console.log("demoArray", item);
         // });
+        // let testObject = {
+        //   name: "abc",
+        //   age: 10,
+        // };
+
+
+        // for in for objects
+        // for (let key in testObject) {
+        //   console.log("key", key);
+        //   if (key === firstName) {
+        //   }
+        // }
+        // let numbersArray = [1, 2, 3, 4, 5];
+
+
+
+        // for in for arrays
+        // for (let number in numbersArray) {
+        //   console.log("numbernumber", number);
+        // }
+
+
+        // while loop
+        // let counter = 0;
+        // while (counter <= 10) {
+        //   console.log("counter", counter + 1);
+        //   counter++;
+        // }
+
+
+        // do while loop
+        // let i = 0;
+        // do {
+        //   i + 1;
+        //   console.log("doWhile loop", i);
+        //   i++;
+        // } while (i <= 10);
     }, [demoArray]);
+
 
     //################    Loops    ####################
 
