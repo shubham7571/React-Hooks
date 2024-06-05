@@ -62,6 +62,10 @@ function YupValidationForm() {
         email: yup.string().email('Invalid email format').required('Email is required'),
         age: yup.number().required('Age is required').positive('Age must be a positive number').integer('Age must be an integer'),
         address: yup.string().required('Address is required'),
+        aadharcard: yup.string().required('Aadhar card is required').matches(/^\d{12}$/, 'Aadhar card must be exactly 12 digits'),
+        pancard: yup.string().required('PAN card is required').matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, 'PAN card must be in the format ABCDE1234F'),
+        voterid: yup.string().required('Voter ID is required').matches(/^[A-Z]{3}[0-9]{7}$/, 'Voter ID must be in the format ABC1234567'),
+
     }).required();
 
     const { reset, handleSubmit, register, setValue, formState: { errors } } = useForm({
@@ -77,7 +81,11 @@ function YupValidationForm() {
                 "Age": data.age,
                 "Address": data.address,
                 "Mobile No": data.mobileno,
-                "Email": data.email
+                "Email": data.email,
+                "Aadhar Card": data.aadharcard,
+                "PAN Card": data.pancard,
+                "Voter ID": data.voterid,
+
             };
             setTableData(tempObj);
             setIsEdit(false);
@@ -91,6 +99,9 @@ function YupValidationForm() {
                 "Email": data.email,
                 "Age": data.age,
                 "Address": data.address,
+                "Aadhar Card": data.aadharcard,
+                "PAN Card": data.pancard,
+                "Voter ID": data.voterid,
             };
             tempObj.push(tableObject);
             setTableData(tempObj);
@@ -107,6 +118,9 @@ function YupValidationForm() {
         setValue('address', selectedRow['Address']);
         setValue('mobileno', selectedRow['Mobile No']);
         setValue('email', selectedRow['Email']);
+        setValue('aadharcard', selectedRow['Aadhar Card']);
+        setValue('pancard', selectedRow['PAN Card']);
+        setValue('voterid', selectedRow['Voter ID']);
         setIsEdit(true);
         setCurrentIndex(index);
         handleOpen();
@@ -162,7 +176,7 @@ function YupValidationForm() {
                                 variant="outlined"
                                 {...register('firstname')}
                                 error={!!errors.firstname}
-                                // helperText={errors.firstname?.message}
+                            // helperText={errors.firstname?.message}
                             />
                             <TextField
                                 label="Last Name"
@@ -170,7 +184,7 @@ function YupValidationForm() {
                                 variant="outlined"
                                 {...register('lastname')}
                                 error={!!errors.lastname}
-                                // helperText={errors.lastname?.message}
+                            // helperText={errors.lastname?.message}
                             />
                             <TextField
                                 label="Mobile No"
@@ -178,7 +192,7 @@ function YupValidationForm() {
                                 variant="outlined"
                                 {...register('mobileno')}
                                 error={!!errors.mobileno}
-                                // helperText={errors.mobileno?.message}
+                            // helperText={errors.mobileno?.message}
                             />
                             <TextField
                                 label="Email"
@@ -186,7 +200,7 @@ function YupValidationForm() {
                                 variant="outlined"
                                 {...register('email')}
                                 error={!!errors.email}
-                                // helperText={errors.email?.message}
+                            // helperText={errors.email?.message}
                             />
                             <TextField
                                 label="Age"
@@ -194,7 +208,7 @@ function YupValidationForm() {
                                 variant="outlined"
                                 {...register('age')}
                                 error={!!errors.age}
-                                // helperText={errors.age?.message}
+                            // helperText={errors.age?.message}
                             />
                             <TextField
                                 label="Address"
@@ -202,7 +216,28 @@ function YupValidationForm() {
                                 variant="outlined"
                                 {...register('address')}
                                 error={!!errors.address}
-                                // helperText={errors.address?.message}
+                            // helperText={errors.address?.message}
+                            />
+                            <TextField
+                                label="Aadhar Card"
+                                size='small'
+                                variant="outlined"
+                                {...register('aadharcard')}
+                                error={!!errors.aadharcard}
+                            />
+                            <TextField
+                                label="Pan Card"
+                                size='small'
+                                variant="outlined"
+                                {...register('pancard')}
+                                error={!!errors.pancard}
+                            />
+                            <TextField
+                                label="Voter Id"
+                                size='small'
+                                variant="outlined"
+                                {...register('voterid')}
+                                error={!!errors.voterid}
                             />
                         </div>
                         <div className='text-end'>

@@ -34,7 +34,7 @@ function UseFormPatientRegistration() {
     const handleClose = () => {
         setOpen(false);
         setSelectedRow(null);
-        reset(); // Clear form data when modal is closed
+        reset();  
     };
 
     useEffect(() => {
@@ -109,7 +109,7 @@ function UseFormPatientRegistration() {
 
     return (
         <div>
-            <div className='text-end m-2'>
+            <div className='text-end m-10 '>
                 <Button variant='contained' onClick={handleOpen}>ADD Student</Button>
             </div>
             <div>

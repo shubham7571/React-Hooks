@@ -200,10 +200,10 @@ function App() {
             {/* <Rough/> */}
             {/* <ParrentTab /> */}
             {/* <TimeSet/> */}
-            {/* <PdfTask/> */}
             {/* <Rough/> */}
             {/* <UseReducer/> */}
             {/* <Axios/> */}
+            {/* <PdfTask/> */}
             <PatientRegistration/>
             {/* <UseFormPatientRegistration/> */}
 

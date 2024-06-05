@@ -1,12 +1,16 @@
-import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Button, FormControl, InputAdornment, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import axios from 'axios';
 import ProfilePhoto from '../assects/ProfilePhoto.webp'
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
+import SearchIcon from '@mui/icons-material/Search';
+
 import { BloodGroupApi, GenderApi, IsdApi, MarriedStatusApi, NationalityApi, PrefixApi, cityApi, countryApi, districtApi, stateApi, talukaApi } from '../../services/PatientRegistration';
+import { API_COMMON_URL } from '../../http';
 
 function PatientRegistration() {
-    const { register, handleSubmit, reset, watch, setValue } = useForm();
+    const { register, handleSubmit, reset, control, watch, setValue } = useForm();
+    const [profilePhoto, setProfilePhoto] = useState(null);
     const [prefix, setPrefix] = useState([]);
     const [isd, setIsd] = useState([]);
     const [marriedStatus, setMarriedStatus] = useState([]);
@@ -19,7 +23,7 @@ function PatientRegistration() {
     const [taluka, setTaluka] = useState([]);
     const [city, setCity] = useState([]);
 
-    console.log("country", state);
+    // console.log("country", state);
 
 
     const [prefixName, setPrefixName] = useState({});
@@ -36,7 +40,18 @@ function PatientRegistration() {
 
 
 
-
+    //upload profile
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = () => {
+            setProfilePhoto(reader.result);
+        };
+        reader.readAsDataURL(file);
+    };
+    const handleUploadButtonClick = () => {
+        document.getElementById('profile-photo-input').click();
+    };
 
     //calculation of age years months days
     const calculateAge = (dob) => {
@@ -63,11 +78,16 @@ function PatientRegistration() {
 
     const onSubmit = (data) => {
 
+        console.log("data",data);
 
         let tempObj = {
             email: data?.email,
             dob: data?.dob,
-            age: data?.age,
+            age: ageDetails?.age,
+            prefix: {
+                id: prefixName?.id,
+                prefixName: prefixName?.value
+            },
             gender: {
                 id: genderName?.id,
                 genderName: genderName?.value
@@ -78,7 +98,7 @@ function PatientRegistration() {
             },
             isdCode: {
                 id: isdCode?.id,
-                isdCode: isdCode?.value
+                isdCodeCode: isdCode?.value
             },
             nationality: {
                 id: nationalityName?.id,
@@ -86,23 +106,49 @@ function PatientRegistration() {
             },
             bloodGroup: {
                 id: bloodGroup?.id,
-                bloodGroup: bloodGroup?.value
+                bloodGroupName: bloodGroup?.value
             },
-            mob: data?.mob,
-            prefix: {
-                id: prefixName?.id,
-                prefix: prefixName?.value
+            country: {
+                id: countryName?.id,
+                country_name: countryName?.value
             },
+            state: {
+                id: stateName?.id,
+                state_name: stateName?.value
+            },
+            district: {
+                id: districtName?.id,
+                district_name: districtName?.value
+            },
+            taluka: {
+                id: talukaName?.id,
+                talukaName: talukaName?.value,
+            },
+            city: {
+                id: cityName?.id,
+                city_name: cityName?.value
+            },
+
+
             fname: data?.firstName,
             mname: data?.middleName,
             lname: data?.lastName,
             mob: data?.mobile,
         };
-        console.log('tempObj', tempObj)
-       
+        console.log("werhj", tempObj.country);
+        axios.post(`${API_COMMON_URL}/registration/saveUser`, tempObj)
+            .then((res) => {
+                console.log(res.data);
 
-        // setValue('prefix', null)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+        console.log('tempObj', tempObj);
+
         reset();
+        setValue('prefix', '')
     };
 
     const dob = watch('dob');
@@ -252,429 +298,559 @@ function PatientRegistration() {
 
 
     return (
-        <form className='m-4  border-2 ' onSubmit={handleSubmit(onSubmit)}>
-            <div className='text-center h-16 p-4 font-bold text-xl bg-gray-200 '>
+        <form className='border-2' onSubmit={handleSubmit(onSubmit)}>
+            <div className='text-center h-16 p-4 font-bold text-xl tracking-wide bg-gray-200'>
                 <h1>Patient Registration</h1>
             </div>
             <div className="shadow-2xl p-2 rounded">
-
                 <div>
-                    {/* Patient Basic Information */}
-                    <h1 className='font-bold  '>Patient Basic Information</h1>
+                    <h1 className='font-bold tracking-wide'>Patient Basic Information</h1>
                     <div className=''>
                         <div className='flex gap-6'>
                             <div>
                                 <div className='grid grid-cols-3 gap-2 my-4'>
-                                    <TextField
-                                        id="search"
-                                        name='Search By Patient Name/UHID/Mobile No'
-                                        size="small"
-                                        className='w-full'
-                                        label="Search By Patient Name/UHID/Mobile No "
-                                        variant="outlined"
-                                        {...register('search')}
+                                    <Controller
+                                        name="search"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <TextField
+                                                {...field}
+                                                id="search"
+                                                size="small"
+                                                className="w-full"
+                                                label="Search By Patient Name/UHID/Mobile No"
+                                                variant="outlined"
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <InputAdornment position="end">
+                                                            <SearchIcon fontSize="small" />
+                                                        </InputAdornment>
+                                                    ),
+                                                }}
+                                            />
+                                        )}
                                     />
-                                    <TextField
-                                        id="email"
-                                        name='email'
-                                        size="small"
-                                        className='w-full'
-                                        label="Email Id"
-                                        variant="outlined"
-                                        {...register('email')}
+                                    <Controller
+                                        name="email"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <TextField
+                                                {...field}
+                                                id="email"
+                                                size="small"
+                                                className="w-full"
+                                                label="Email Id"
+                                                variant="outlined"
+                                            />
+                                        )}
                                     />
-                                    <TextField
-                                        id="registrationDate"
-                                        name='registrationDate'
-                                        size="small"
-                                        className='w-full'
-                                        label="Registration Date"
-                                        InputLabelProps={{ shrink: true }}
-                                        type='date'
-                                        variant="outlined"
-                                        {...register('registrationDate')}
+                                    <Controller
+                                        name="registrationDate"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <TextField
+                                                {...field}
+                                                size="small"
+                                                className='w-full'
+                                                label="Registration Date"
+                                                InputLabelProps={{ shrink: true }}
+                                                type='date'
+                                                variant="outlined"
+                                            />
+                                        )}
                                     />
                                 </div>
                                 <div className='grid grid-cols-3 gap-2 my-5'>
-                                    <div className='flex justify-around gap-2 '>
-                                        <FormControl>
-                                            <InputLabel id="prefix-label">Prefix*</InputLabel>
-                                            <Select
-                                                labelId="prefix-label"
-                                                id="prefix"
-                                                defaultValue={prefix}
-                                                name='prefix'
-                                                label="Prefix*"
-                                                size='small'
-                                                className='w-40'
-                                                {...register('prefix')}
-                                            >
-                                                {
-                                                    prefix?.length > 0
-                                                        ? prefix?.map((item, index) => (
-                                                            <MenuItem onClick={() => { handleAddPrefix(item.value, item.id) }} key={index} value={item.value}>{item.name}</MenuItem>
-                                                        ))
-                                                        : null
-                                                }
-                                            </Select>
-                                        </FormControl>
-
-                                        <TextField
-                                            id="firstName"
-                                            name='firstName'
-                                            size="small"
-                                            label="First Name *"
-                                            className='w-40'
-                                            variant="outlined"
-                                            {...register('firstName')}
+                                    <div className='flex justify-around gap-2'>
+                                        <Controller
+                                            name="prefix"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <FormControl>
+                                                    <InputLabel id="prefix-label">Prefix*</InputLabel>
+                                                    <Select
+                                                        {...field}
+                                                        labelId="prefix-label"
+                                                        id="prefix"
+                                                        label="Prefix*"
+                                                        size="small"
+                                                        className="w-40"
+                                                    >
+                                                        {prefix?.map((item, index) => (
+                                                            <MenuItem key={index} value={item.value}>
+                                                                {item.name}
+                                                            </MenuItem>
+                                                        ))}
+                                                    </Select>
+                                                </FormControl>
+                                            )}
+                                        />
+                                        <Controller
+                                            name="firstName"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    {...field}
+                                                    id="firstName"
+                                                    size="small"
+                                                    label="First Name *"
+                                                    className='w-40'
+                                                    variant="outlined"
+                                                />
+                                            )}
                                         />
                                     </div>
-                                    <TextField
-                                        id="middleName"
-                                        name='middleName'
-                                        className='w-full'
-                                        size="small"
-                                        label="Middle Name"
-                                        variant="outlined"
-                                        {...register('middleName')}
+                                    <Controller
+                                        name="middleName"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <TextField
+                                                {...field}
+                                                id="middleName"
+                                                size="small"
+                                                className='w-full'
+                                                label="Middle Name"
+                                                variant="outlined"
+                                            />
+                                        )}
                                     />
-                                    <TextField
-                                        id="lastName"
-                                        name='lastName'
-                                        className='w-full'
-                                        size="small"
-                                        label="Last Name *"
-                                        variant="outlined"
-                                        {...register('lastName')}
+                                    <Controller
+                                        name="lastName"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <TextField
+                                                {...field}
+                                                id="lastName"
+                                                size="small"
+                                                className='w-full'
+                                                label="Last Name *"
+                                                variant="outlined"
+                                            />
+                                        )}
                                     />
                                 </div>
                                 <div className='grid grid-cols-3 gap-2 my-5'>
-                                    <div className='flex  justify-around  gap-2'>
-                                        <TextField
-                                            id="dob"
-                                            name='dob'
-                                            size="small"
-                                            label="Date of Birth"
-                                            className='w-48'
-
-                                            InputLabelProps={{ shrink: true }}
-                                            type='date'
-                                            variant="outlined"
-                                            {...register('dob')}
+                                    <div className='flex justify-around gap-2'>
+                                        <Controller
+                                            name="dob"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    {...field}
+                                                    id="dob"
+                                                    size="small"
+                                                    label="Date of Birth"
+                                                    className='w-48'
+                                                    InputLabelProps={{ shrink: true }}
+                                                    type='date'
+                                                    variant="outlined"
+                                                />
+                                            )}
                                         />
-                                        <TextField
-                                            id="age"
-                                            name='age'
-                                            size="small"
-                                            label="Age"
-                                            className='w-48'
-
-                                            variant="outlined"
-                                            value={ageDetails.age}
-                                            InputProps={{
-                                                readOnly: true,
-                                            }}
+                                        <Controller
+                                            name="age"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    {...field}
+                                                    id="age"
+                                                    size="small"
+                                                    label="Age"
+                                                    className='w-48'
+                                                    variant="outlined"
+                                                    InputProps={{
+                                                        readOnly: true,
+                                                    }}
+                                                />
+                                            )}
                                         />
                                     </div>
                                     <div className='flex justify-around space-x-3'>
-                                        <TextField
-                                            id="years"
-                                            name='years'
-                                            size="small"
-                                            label="Years"
-                                            variant="outlined"
-                                            value={ageDetails.years}
-                                            InputProps={{
-                                                readOnly: true,
-                                            }}
+                                        <Controller
+                                            name="years"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    {...field}
+                                                    id="years"
+                                                    size="small"
+                                                    label="Years"
+                                                    variant="outlined"
+                                                    InputProps={{
+                                                        readOnly: true,
+                                                    }}
+                                                />
+                                            )}
                                         />
-                                        <TextField
-                                            id="months"
-                                            name='months'
-                                            size="small"
-                                            label="Months"
-                                            variant="outlined"
-                                            value={ageDetails.months}
-                                            InputProps={{
-                                                readOnly: true,
-                                            }}
+                                        <Controller
+                                            name="months"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    {...field}
+                                                    id="months"
+                                                    size="small"
+                                                    label="Months"
+                                                    variant="outlined"
+                                                    InputProps={{
+                                                        readOnly: true,
+                                                    }}
+                                                />
+                                            )}
                                         />
-                                        <TextField
-                                            id="days"
-                                            name='days'
-                                            size="small"
-                                            label="Days"
-                                            variant="outlined"
-                                            value={ageDetails.days}
-                                            InputProps={{
-                                                readOnly: true,
-                                            }}
+                                        <Controller
+                                            name="days"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    {...field}
+                                                    id="days"
+                                                    size="small"
+                                                    label="Days"
+                                                    variant="outlined"
+                                                    InputProps={{
+                                                        readOnly: true,
+                                                    }}
+                                                />
+                                            )}
                                         />
                                     </div>
-                                    <FormControl>
-                                        <InputLabel id="gender-label">Gender</InputLabel>
-                                        <Select
-                                            labelId="gender-label"
-                                            id="gender"
-                                            name='gender'
-                                            label="Gender"
-                                            size='small'
-                                        >
-                                            {
-                                                gender?.map((item, index) => (
-                                                    <MenuItem onClick={() => { handleAddGender(item.value, item.id) }} key={index} value={item.value}>{item.name}</MenuItem>
-                                                ))
-                                            }
-                                        </Select>
-                                    </FormControl>
-
-
+                                    <Controller
+                                        name="gender"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <FormControl>
+                                                <InputLabel id="gender-label">Gender</InputLabel>
+                                                <Select
+                                                    {...field}
+                                                    labelId="gender-label"
+                                                    id="gender"
+                                                    label="Gender"
+                                                    size='small'
+                                                >
+                                                    {gender?.map((item, index) => (
+                                                        <MenuItem key={index} value={item.value}>
+                                                            {item.name}
+                                                        </MenuItem>
+                                                    ))}
+                                                </Select>
+                                            </FormControl>
+                                        )}
+                                    />
                                 </div>
                             </div>
-                            <div className=' rounded border h-44 w-80 my-3 p-2'>
-                                <img className='h-36 w-72' src={ProfilePhoto}></img>
-                                <p className="font-medium text-center text text-blue-400">UPLOAD PROFILE</p>
+                            <div className='rounded border h-44 w-80 my-3 p-2'>
+                                <input
+                                    id="profile-photo-input"
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={handleFileChange}
+                                />
+                                <img className='h-36 w-72' src={profilePhoto || ProfilePhoto} alt="Profile" />
+                                <button
+                                    type="button"
+                                    className="font-medium text-center text-blue-500 w-full"
+                                    onClick={handleUploadButtonClick}
+                                >
+                                    UPLOAD PROFILE
+                                </button>
                             </div>
                         </div>
-                        <div className="flex space-x-4">
-                            <FormControl className='w-24' >
-                                <InputLabel id="isd-label">ISD*</InputLabel>
-                                <Select
-                                    labelId="isd-label"
-                                    id="isd"
-                                    name="isd"
-                                    label="ISD*"
-                                    size="small"
-                                    {...register('isd')}
-                                >
-                                    {isd?.map((item, index) => (
-                                        <MenuItem
-                                            onClick={() => { handleIsd(item.value, item.id); }}
-                                            key={index}
-                                            value={item.value}
+                        <div className='flex space-x-4'>
+                            <Controller
+                                name="isd"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormControl className='w-24'>
+                                        <InputLabel id="isd-label">ISD*</InputLabel>
+                                        <Select
+                                            {...field}
+                                            labelId="isd-label"
+                                            id="isd"
+                                            label="ISD*"
+                                            size="small"
                                         >
-                                            {item.name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <TextField
-                                id="mobile"
-                                name="mobile"
-                                size="small"
-                                label="Mobile *"
-                                variant="outlined"
-                                {...register('mobile')}
+                                            {isd?.map((item, index) => (
+                                                <MenuItem key={index} value={item.value}>
+                                                    {item.name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                )}
                             />
-
-                            <FormControl style={{ width: '28%' }}  >
-                                <InputLabel id="maritalStatus-label">Marital Status</InputLabel>
-                                <Select
-                                    labelId="maritalStatus-label"
-                                    id="maritalStatus"
-                                    name="maritalStatus"
-                                    label="Marital Status"
-                                    size="small"
-                                    {...register('maritalStatus')}
-                                >
-                                    {marriedStatus?.map((item, index) => (
-                                        <MenuItem
-                                            onClick={() => { handleMaritalStatus(item.value, item.id); }}
-                                            key={index}
-                                            value={item.value}
+                            <Controller
+                                name="mobile"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        id="mobile"
+                                        size="small"
+                                        label="Mobile *"
+                                        variant="outlined"
+                                    />
+                                )}
+                            />
+                            <Controller
+                                name="maritalStatus"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormControl style={{ width: '28%' }}>
+                                        <InputLabel id="maritalStatus-label">Marital Status</InputLabel>
+                                        <Select
+                                            {...field}
+                                            labelId="maritalStatus-label"
+                                            id="maritalStatus"
+                                            label="Marital Status"
+                                            size="small"
                                         >
-                                            {item.name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-
-                            <FormControl className='w-64' >
-                                <InputLabel id="nationality-label">Nationality</InputLabel>
-                                <Select
-                                    labelId="nationality-label"
-                                    id="nationality"
-                                    name="nationality"
-                                    label="Nationality"
-                                    size="small"
-                                    {...register('nationality')}
-                                >
-                                    {nationality.map((item, index) => (
-                                        <MenuItem
-                                            onClick={() => { handleNationality(item.value, item.id); }}
-                                            key={index}
-                                            value={item.value}
+                                            {marriedStatus?.map((item, index) => (
+                                                <MenuItem key={index} value={item.value}>
+                                                    {item.name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                )}
+                            />
+                            <Controller
+                                name="nationality"
+                                control={control}
+                                defaultValue=""
+                                render={({ field }) => (
+                                    <FormControl className='w-64'>
+                                        <InputLabel id="nationality-label">Nationality</InputLabel>
+                                        <Select
+                                            {...field}
+                                            labelId="nationality-label"
+                                            id="nationality"
+                                            label="Nationality"
+                                            size="small"
                                         >
-                                            {item.name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl >
-                            <FormControl className='w-64' >
-                                <InputLabel id="bloodGroup-label">Blood Group</InputLabel>
-                                <Select
-                                    labelId="bloodGroup-label"
-                                    id="bloodGroup"
-                                    name="bloodGroup"
-                                    label="Blood Group"
-                                    size="small"
-                                    {...register('bloodGroup')}
-                                >
-                                    {blood?.map((item, index) => (
-                                        <MenuItem
-                                            onClick={() => { handleAddBloodGroup(item.value, item.id); }}
-                                            key={index}
-                                            value={item.value}
+                                            {nationality.map((item, index) => (
+                                                <MenuItem key={index} value={item.value}>
+                                                    {item.name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                )}
+                            />
+                            <Controller
+                                name="bloodGroup"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormControl className='w-64'>
+                                        <InputLabel id="bloodGroup-label">Blood Group</InputLabel>
+                                        <Select
+                                            {...field}
+                                            labelId="bloodGroup-label"
+                                            id="bloodGroup"
+                                            label="Blood Group"
+                                            size="small"
                                         >
-                                            {item.name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
+                                            {blood?.map((item, index) => (
+                                                <MenuItem key={index} value={item.value}>
+                                                    {item.name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                )}
+                            />
                         </div>
                     </div>
-                    <hr class="w-full border-t-2 border my-6" />
-
-                    {/* Patient Basic Information Close */}
-                    {/* Address Details */}
+                    <hr className="w-full border-t-2 border my-6" />
                     <div>
                         <h1 className='font-bold'>Address Details</h1>
-                        <div className='grid grid-cols-4 gap-2 my-4 '>
-                            <TextField
-                                id="houseNo"
-                                size="small"
-                                label="House No/Flat No/Building Name"
-                                variant="outlined"
-                                {...register('houseNo')}
+                        <div className='grid grid-cols-4 gap-2 my-4'>
+                            <Controller
+                                name="houseNo"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        id="houseNo"
+                                        size="small"
+                                        label="House No/Flat No/Building Name"
+                                        variant="outlined"
+                                    />
+                                )}
                             />
-                            <TextField
-                                id="streetAddress"
-                                size="small"
-                                label="Street Address"
-                                variant="outlined"
-                                {...register('streetAddress')}
+                            <Controller
+                                name="streetAddress"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        id="streetAddress"
+                                        size="small"
+                                        label="Street Address"
+                                        variant="outlined"
+                                    />
+                                )}
                             />
-                            <FormControl>
-                                <InputLabel id="country-label">Country</InputLabel>
-                                <Select
-                                    labelId="country-label"
-                                    label="Country"
-                                    size="small"
-                                    className="min-w-[200px]"
-                                    {...register('country')}
-                                >
-                                    {
-                                        country.map((item) => {
-                                            return (
-                                                <MenuItem onClick={() => handleAddCountry(item.value, item.id)} value={item.value}>{item.label}</MenuItem>
-                                            )
-                                        })
-                                    }
-                                </Select>
-
-                            </FormControl>
-
-                            <FormControl>
-                                <InputLabel id="state-label">State</InputLabel>
-                                <Select
-                                    labelId="state-label"
-                                    id="state"
-                                    label="State"
-                                    size='small'
-                                    className="min-w-[200px]"
-                                    {...register('state')}
-                                >
-                                    {
-                                        state.map((item) => (
-                                            <MenuItem onClick={() => handleAddState(item.value, item.id)} value={item.value}>{item.label}</MenuItem>
-                                        ))
-                                    }
-                                </Select>
-                            </FormControl>
+                            <Controller
+                                name="country"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormControl>
+                                        <InputLabel id="country-label">Country</InputLabel>
+                                        <Select
+                                            {...field}
+                                            labelId="country-label"
+                                            label="Country"
+                                            size="small"
+                                            className="min-w-[200px]"
+                                        >
+                                            {country.map((item) => (
+                                                <MenuItem onClick={() => { handleAddCountry(item.value, item.id) }} key={item.value} value={item.value}>
+                                                    {item.label}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                )}
+                            />
+                            <Controller
+                                name="state"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormControl>
+                                        <InputLabel id="state-label">State</InputLabel>
+                                        <Select
+                                            {...field}
+                                            labelId="state-label"
+                                            id="state"
+                                            label="State"
+                                            size='small'
+                                            className="min-w-[200px]"
+                                        >
+                                            {state.map((item) => (
+                                                <MenuItem onClick={() => { handleAddState(item.value, item.id) }} key={item.value} value={item.value}>
+                                                    {item.label}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                )}
+                            />
                         </div>
-                        <div className='grid grid-cols-4 gap-2 my-4 '>
-                            <div className='flex justify-around gap-2  '>
-                                <FormControl>
-                                    <InputLabel id="district-label">District</InputLabel>
-                                    <Select
-                                        labelId="district-label"
-                                        id="district"
-                                        label="district"
-                                        size='small'
-                                        className='w-36'
-                                        {...register('district')}
-                                    >
-                                        {
-                                            district?.map((item) => (
-                                                <MenuItem onClick={() => handleAddDistrict(item.value, item.id)} value={item.value}>{item.label}</MenuItem>
-                                            ))
-                                        }
-                                    </Select>
-                                </FormControl>
-                                <FormControl>
-                                    <InputLabel id="taluka-label">Taluka</InputLabel>
-                                    <Select
-                                        labelId="taluka-label"
-                                        id="taluka"
-                                        label="Taluka"
-                                        size='small'
-                                        className="w-36"
-                                        {...register('taluka')}
-                                    >
-                                        {taluka.map((item) => (
-                                            <MenuItem onClick={() => handleAddTaluka(item.value, item.id)} value={item.value}>{item.label}</MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-
+                        <div className='grid grid-cols-4 gap-2 my-4'>
+                            <div className='flex justify-around gap-2'>
+                                <Controller
+                                    name="district"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <FormControl>
+                                            <InputLabel id="district-label">District</InputLabel>
+                                            <Select
+                                                {...field}
+                                                labelId="district-label"
+                                                id="district"
+                                                label="District"
+                                                size='small'
+                                                className='w-36'
+                                            >
+                                                {district?.map((item) => (
+                                                    <MenuItem onClick={() => { handleAddDistrict(item.value, item.id) }} key={item.value} value={item.value}>
+                                                        {item.label}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    )}
+                                />
+                                <Controller
+                                    name="taluka"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <FormControl>
+                                            <InputLabel id="taluka-label">Taluka</InputLabel>
+                                            <Select
+                                                {...field}
+                                                labelId="taluka-label"
+                                                id="taluka"
+                                                label="Taluka"
+                                                size='small'
+                                                className="w-36"
+                                            >
+                                                {taluka.map((item) => (
+                                                    <MenuItem onClick={() => { handleAddTaluka(item.value, item.id) }} key={item.value} value={item.value}>
+                                                        {item.label}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    )}
+                                />
                             </div>
-
-                            <FormControl>
-                                <InputLabel id="city-label">City</InputLabel>
-                                <Select
-                                    labelId="city-label"
-                                    id="city"
-                                    label="city"
-                                    size='small'
-                                    className="min-w-[200px]"
-                                    {...register('city')}
-                                >
-                                    {
-                                        city.map((item) => (
-                                            <MenuItem onClick={() => handleAddCity(item.value, item.id)} value={item.value}>{item.label}</MenuItem>
-                                        ))
-                                    }
-                                </Select>
-                            </FormControl>
-                            <TextField
-                                id="pincode"
-                                size="small"
-                                className='w-full'
-                                label="Pincode*"
-                                variant="outlined"
-                                {...register('pincode')}
+                            <Controller
+                                name="city"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormControl>
+                                        <InputLabel id="city-label">City</InputLabel>
+                                        <Select
+                                            {...field}
+                                            labelId="city-label"
+                                            id="city"
+                                            label="City"
+                                            size='small'
+                                            className="min-w-[200px]"
+                                        >
+                                            {city?.map((item) => (
+                                                <MenuItem onClick={() => { handleAddCity(item.value, item.id) }} key={item.value} value={item.value}>
+                                                    {item.label}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                )}
                             />
-                            <FormControl>
-                                <InputLabel id="area-label">Area</InputLabel>
-                                <Select
-                                    labelId="area-label"
-                                    id="area"
-                                    label="Area"
-                                    size='small'
-                                    {...register('area')}
-                                >
-                                    <MenuItem value="Area1">Area1</MenuItem>
-                                    <MenuItem value="Area2">Area2</MenuItem>
-                                </Select>
-                            </FormControl>
+                            <Controller
+                                name="pincode"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        id="pincode"
+                                        size="small"
+                                        className='w-full'
+                                        label="Pincode*"
+                                        variant="outlined"
+                                    />
+                                )}
+                            />
+                            <Controller
+                                name="area"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormControl>
+                                        <InputLabel id="area-label">Area</InputLabel>
+                                        <Select
+                                            {...field}
+                                            labelId="area-label"
+                                            id="area"
+                                            label="Area"
+                                            size='small'
+                                        >
+                                            <MenuItem value="Area1">Area1</MenuItem>
+                                            <MenuItem value="Area2">Area2</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                )}
+                            />
                         </div>
                     </div>
-                    <div className='text-center  my-6'>
+                    <div className='text-center my-6'>
                         <Button className='h-10 w-16' type='submit' variant='contained'>Submit</Button>
                     </div>
                 </div>
             </div>
-        </form >
+        </form>
     );
 }
 
