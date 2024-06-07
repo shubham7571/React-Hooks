@@ -12,6 +12,9 @@ import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import * as yup from 'yup';
+
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const style = {
     position: 'absolute',
@@ -24,17 +27,26 @@ const style = {
     p: 4,
 };
 
+const schema = yup.object().shape({
+    firstname: yup.string().required('First Name is required'),
+    lastName: yup.string().required('Last Name is required'),
+    age: yup.number().typeError('Age must be a number').required('Age is required').positive().integer(),
+    standard: yup.string().required('Standard is required'),
+    percentage: yup.number().typeError('Percentage must be a number').required('Percentage is required').min(0).max(100),
+});
 function UseFormPatientRegistration() {
+
     const [open, setOpen] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
-    const { reset, handleSubmit, register, setValue } = useForm();
+    const { reset, handleSubmit, register, setValue, formState: { errors } } = useForm({
+        resolver: yupResolver(schema)
+    });
     const [data, setData] = useState([]);
-
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
         setOpen(false);
         setSelectedRow(null);
-        reset();  
+        reset();
     };
 
     useEffect(() => {
@@ -51,6 +63,8 @@ function UseFormPatientRegistration() {
         }
     }, [selectedRow, setValue]);
 
+
+
     const onSubmit = (data) => {
         const tempObj = {
             firstName: data.firstname,
@@ -61,7 +75,7 @@ function UseFormPatientRegistration() {
         };
 
         if (selectedRow) {
-            axios.put(`http://192.168.138.12:8080/updateStudent/${selectedRow.id}`, tempObj)
+            axios.put(`http://192.168.0.77:8080/updateStudent/${selectedRow.id}`, tempObj)
                 .then(() => {
                     getDataFromDataBase();
                 })
@@ -69,7 +83,7 @@ function UseFormPatientRegistration() {
                     console.log(err);
                 });
         } else {
-            axios.post(`http://192.168.138.12:8080/student/save`, tempObj)
+            axios.post(`http://192.168.0.77:8080/student/save`, tempObj)
                 .then(() => {
                     getDataFromDataBase();
                 })
@@ -82,7 +96,7 @@ function UseFormPatientRegistration() {
     };
 
     const getDataFromDataBase = () => {
-        axios.get(`http://192.168.138.12:8080/StudentsList`)
+        axios.get(`http://192.168.0.77:8080/StudentsList`)
             .then((res) => {
                 setData(res.data);
             })
@@ -98,13 +112,15 @@ function UseFormPatientRegistration() {
 
     // delete the data
     const handleDelete = (id) => {
-        axios.delete(`http://192.168.138.12:8080/deleteStudent/${id}`)
-            .then(() => {
-                getDataFromDataBase();
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        if (window.confirm('Are you sure you want to delete this student?')) {
+            axios.delete(`http://192.168.0.77:8080/deleteStudent/${id}`)
+                .then(() => {
+                    getDataFromDataBase();
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
     };
 
     return (
@@ -136,30 +152,42 @@ function UseFormPatientRegistration() {
                                     size="small"
                                     label="First Name"
                                     fullWidth
+                                    error={!!errors.firstname}
+                                // helperText={errors.firstname?.message}
+
                                 />
                                 <TextField
                                     {...register('lastName')}
                                     size='small'
                                     label='Last Name'
                                     fullWidth
+                                    error={!!errors.lastName}
+                                // helperText={errors.lastName ? errors.lastName.message : ""}
                                 />
                                 <TextField
                                     {...register('age')}
                                     size='small'
                                     label='Age'
                                     fullWidth
+                                    error={!!errors.age}
+                                // helperText={errors.age ? errors.age.message : ""}
+
                                 />
                                 <TextField
                                     {...register('standard')}
                                     size='small'
                                     label='Standard'
                                     fullWidth
+                                    error={!!errors.standard}
+                                // helperText={errors.standard ? errors.standard.message : ""}
                                 />
                                 <TextField
                                     {...register('percentage')}
                                     size='small'
                                     label='Percentage'
                                     fullWidth
+                                    error={!!errors.percentage}
+                                // helperText={errors.percentage ? errors.percentage.message : ""}
                                 />
                             </div>
                             <div className='text-end mt-4'>

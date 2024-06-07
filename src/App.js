@@ -94,6 +94,7 @@ import UseFormPatientRegistration from "./components/patient registration/UseFor
 import PasswordShow from "./components/hookform/passwordform/PasswordShow";
 import HookFormTask from "./components/hookform/HookFormTask";
 import YupValidationForm from "./components/hookform/yupvalidation/YupValidationForm";
+import NestedArrayMap from "./components/nestedArray/NestedArrayMap";
 function App() {
     // const [text,setText] =useState("")
     // const [data,setdata] = useState(prop);
@@ -204,8 +205,9 @@ function App() {
             {/* <UseReducer/> */}
             {/* <Axios/> */}
             {/* <PdfTask/> */}
-            <PatientRegistration/>
+            {/* <PatientRegistration/> */}
             {/* <UseFormPatientRegistration/> */}
+            <NestedArrayMap/>
 
 
 
