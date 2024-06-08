@@ -1,54 +1,28 @@
-import React from "react";
+import React, { memo } from "react";
 import { DummyData } from "./DummyData";
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
+import { Switch } from 'antd';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 function NestedArrayMap() {
     const [dataArray, setDataArray] = React.useState(DummyData.subFunction);
 
-    // Fetch example (not directly related to the problem at hand)
-    React.useEffect(() => {
-        fetch("https://jsonplaceholder.typicode.com/users/1", {
-            responseType: "text/plain",
-        })
-            .then((response) => response.json())
-            .then((res) => {
-                console.log("promise result if fulfilled", res);
-            })
-            .catch((error) => {
-                console.log("Error while fetching", error);
-            });
-    }, []);
-
-    React.useEffect(() => {
-        console.log("modified dataArray is :", dataArray);
-    }, [dataArray]);
-
-    const handleParentChange = (e, parentIndex) => {
+    const handleParentChange = (e, index) => {
+        e.stopPropagation(); // Prevent the accordion from closing
         let data = [...dataArray];
+        data[index].isChecked = e.target.checked;
 
-        if (e.target.checked) {
-            data[parentIndex].isChecked = true;
-
-            // Checking all children if the parent is checked
-            if (data[parentIndex].subFunction?.length > 0) {
-                data[parentIndex].subFunction = data[parentIndex].subFunction.map(child => ({
-                    ...child,
-                    isChecked: true
-                }));
-            }
-        } else {
-            data[parentIndex].isChecked = false;
-
-            // Unchecking all children if the parent is unchecked
-            if (data[parentIndex].subFunction?.length > 0) {
-                data[parentIndex].subFunction = data[parentIndex].subFunction.map(child => ({
-                    ...child,
-                    isChecked: false
-                }));
-            }
+        if (data[index]?.subFunction) {
+            data[index].subFunction = data[index].subFunction.map(sub => ({
+                ...sub,
+                isChecked: e.target.checked,
+                permissions: sub.permissions.map(permission => ({
+                    ...permission,
+                    isChecked: e.target.checked
+                }))
+            }));
         }
 
         setDataArray(data);
@@ -58,12 +32,40 @@ function NestedArrayMap() {
         let data = [...dataArray];
         data[parentIndex].subFunction[childIndex].isChecked = e.target.checked;
 
-        // Update parent checkbox based on children state
-        const allChildrenChecked = data[parentIndex].subFunction.every(child => child.isChecked);
-        data[parentIndex].isChecked = allChildrenChecked;
+        if (data[parentIndex].subFunction[childIndex]?.permissions) {
+            data[parentIndex].subFunction[childIndex].permissions = data[parentIndex].subFunction[childIndex].permissions.map(permission =>
+            ({
+                ...permission,
+                isChecked: e.target.checked
+            }));
+        }
+
+        // Check if all child checkboxes are unchecked
+        const allUnchecked = data[parentIndex].subFunction.every(child => !child.isChecked);
+        data[parentIndex].isChecked = !allUnchecked;
 
         setDataArray(data);
     };
+
+    const handlePermissionChange = (e, parentIndex, childIndex, permissionIndex) => {
+        let data = [...dataArray];
+        data[parentIndex].subFunction[childIndex].permissions[permissionIndex].isChecked = e.target.checked;
+
+        // Check if all permission checkboxes are unchecked
+        const allPermissionsUnchecked = data[parentIndex].subFunction[childIndex].permissions.every(permission => !permission.isChecked);
+        data[parentIndex].subFunction[childIndex].isChecked = !allPermissionsUnchecked;
+
+        // Check if all child checkboxes are checked
+        const allChildrenChecked = data[parentIndex].subFunction.every(child => child.isChecked);
+        data[parentIndex].isChecked = allChildrenChecked;
+
+        // Check if all child checkboxes are unchecked
+        const allChildrenUnchecked = data[parentIndex].subFunction.every(child => !child.isChecked);
+        data[parentIndex].isChecked = !allChildrenUnchecked;
+
+        setDataArray(data);
+    };
+
 
     return (
         <>
@@ -74,8 +76,8 @@ function NestedArrayMap() {
                             <Accordion key={parentIndex}>
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel1-content"
-                                    id="panel1-header"
+                                    aria-controls={`panel${parentIndex}-content`}
+                                    id={`panel${parentIndex}-header`}
                                 >
                                     <div className="flex gap-4">
                                         <input
@@ -89,18 +91,55 @@ function NestedArrayMap() {
                                     </div>
                                 </AccordionSummary>
                                 <AccordionDetails>
-                                    <div className="grid grid-cols-5 gap-5 ml-20">
+                                    <div className=" mx-20">
                                         {data.subFunction && data.subFunction.length > 0 &&
                                             data.subFunction.map((subFunctionData, childIndex) => (
-                                                <div key={childIndex} className="flex gap-4">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={subFunctionData.isChecked}
-                                                        onChange={(e) => handleChildChange(e, parentIndex, childIndex)}
-                                                    />
-                                                    <label>{subFunctionData.functionality}</label>
+                                                <div key={childIndex} className="my-2 gap-4">
+                                                    <Accordion>
+                                                        <AccordionSummary
+                                                            expandIcon={<ArrowDropDownIcon />}
+                                                            aria-controls="panel2-content"
+                                                            id="panel2-header"
+                                                        >
+                                                            <div className="space-x-3  font-medium tracking-wide  font-serif">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={subFunctionData.isChecked}
+                                                                    onChange={(e) => handleChildChange(e, parentIndex, childIndex)}
+                                                                />
+                                                                <label>{subFunctionData.functionality}</label>
+                                                            </div>
+                                                        </AccordionSummary>
+                                                        <AccordionDetails>
+                                                            <div className="grid grid-cols-3">
+                                                                {
+                                                                    subFunctionData?.permissions && subFunctionData.permissions.length > 0 &&
+                                                                    subFunctionData.permissions.map((permissionData, permissionIndex) => (
+                                                                        <div key={permissionIndex} className=" flex my-2 justify-between mr-16 ">
+                                                                            <div className="space-x-3">
+                                                                                <input
+                                                                                    type="checkbox"
+                                                                                    checked={permissionData.isChecked}
+                                                                                    onChange={(e) => handlePermissionChange(e, parentIndex, childIndex, permissionIndex)}
+                                                                                />
+                                                                                <label>{permissionData.permission}</label>
+                                                                            </div>
+                                                                            <div>
+                                                                                <Switch
+                                                                                    checked={permissionData.isAction}
+                                                                                />
+                                                                            </div>
+                                                                        </div>
+                                                                    ))
+                                                                }
+                                                            </div>
+
+                                                        </AccordionDetails>
+                                                    </Accordion>
                                                 </div>
-                                            ))}
+
+                                            ))
+                                        }
                                     </div>
                                 </AccordionDetails>
                             </Accordion>
@@ -109,7 +148,6 @@ function NestedArrayMap() {
                 }
             </div>
         </>
-    );
-}
+    );}
 
-export default NestedArrayMap;
+export default memo(NestedArrayMap);
