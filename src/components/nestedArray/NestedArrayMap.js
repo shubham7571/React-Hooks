@@ -18,7 +18,7 @@ function NestedArrayMap() {
             data[index].subFunction = data[index].subFunction.map(sub => ({
                 ...sub,
                 isChecked: e.target.checked,
-                permissions: sub.permissions.map(permission => ({
+                permissions: sub.permissions?.map(permission => ({
                     ...permission,
                     isChecked: e.target.checked
                 }))
@@ -71,25 +71,25 @@ function NestedArrayMap() {
         <>
             <div>
                 {dataArray?.length > 0 &&
-                    <div>
+                    <div >
                         {dataArray.map((data, parentIndex) => (
                             <Accordion key={parentIndex}>
-                                <AccordionSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                    aria-controls={`panel${parentIndex}-content`}
-                                    id={`panel${parentIndex}-header`}
-                                >
-                                    <div className="flex gap-4">
-                                        <input
-                                            type="checkbox"
-                                            checked={data.isChecked}
-                                            onChange={(e) => handleParentChange(e, parentIndex)}
-                                        />
-                                        <label className="tracking-wide font-serif font-semibold">
-                                            {data.functionality}
-                                        </label>
-                                    </div>
-                                </AccordionSummary>
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon />}
+                                        aria-controls={`panel${parentIndex}-content`}
+                                        id={`panel${parentIndex}-header`}
+                                    >
+                                        <div className="flex  gap-4">
+                                            <input
+                                                type="checkbox"
+                                                checked={data.isChecked}
+                                                onChange={(e) => handleParentChange(e, parentIndex)}
+                                            />
+                                            <label className="tracking-wide font-serif font-semibold">
+                                                {data.functionality}
+                                            </label>
+                                        </div>
+                                    </AccordionSummary>
                                 <AccordionDetails>
                                     <div className=" mx-20">
                                         {data.subFunction && data.subFunction.length > 0 &&
@@ -143,11 +143,13 @@ function NestedArrayMap() {
                                     </div>
                                 </AccordionDetails>
                             </Accordion>
+
                         ))}
                     </div>
                 }
             </div>
         </>
-    );}
+    );
+}
 
 export default memo(NestedArrayMap);

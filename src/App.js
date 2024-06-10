@@ -95,6 +95,7 @@ import PasswordShow from "./components/hookform/passwordform/PasswordShow";
 import HookFormTask from "./components/hookform/HookFormTask";
 import YupValidationForm from "./components/hookform/yupvalidation/YupValidationForm";
 import NestedArrayMap from "./components/nestedArray/NestedArrayMap";
+import UseFiledArray from "./components/hookform/yupvalidation/UseFiledArray";
 function App() {
     // const [text,setText] =useState("")
     // const [data,setdata] = useState(prop);
@@ -191,6 +192,7 @@ function App() {
 
             {/* <Configuration /> */}
             {/* <Form/> */}
+            {/* <UseFiledArray/> */}
             {/* <YupValidation/> */}
             {/* <YupValidationForm/> */}
             {/* <CrudOperation /> */}
@@ -207,7 +209,7 @@ function App() {
             {/* <PdfTask/> */}
             {/* <PatientRegistration/> */}
             {/* <UseFormPatientRegistration/> */}
-            <NestedArrayMap/>
+            {/* <NestedArrayMap/> */}
 
 
 
