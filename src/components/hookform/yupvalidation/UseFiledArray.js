@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { Button } from '@mui/material';
 
 const itemSchema = yup.object().shape({
     name: yup.string().required('Name is required'),
@@ -38,38 +39,43 @@ function UseFiledArray() {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            {fields.map((field, index) => (
-                <div key={field.id} style={{ marginBottom: '10px' }}>
-                    <Controller
-                        name={`items.${index}.name`}
-                        control={control}
-                        defaultValue={field.name || ''}
-                        render={({ field }) => (
-                            <input {...field} placeholder="Name" />
-                        )}
-                    />
-                    {errors.items?.[index]?.name && <p>{errors.items[index].name.message}</p>}
+            <div>
+                {fields.map((field, index) => (
+                    <div key={field.id} style={{ marginBottom: '10px' }} className='space-x-8 mt-10 ml-10'>
+                        <Controller
+                            name={`items.${index}.name`}
+                            control={control}
+                            defaultValue={field.name || ''}
+                            render={({ field }) => (
+                                <input {...field} className='border border-black rounded' placeholder="Name" />
+                            )}
+                        />
+                        {errors.items?.[index]?.name && <p>{errors.items[index].name.message}</p>}
 
-                    <Controller
-                        name={`items.${index}.age`}
-                        control={control}
-                        defaultValue={field.age || ''}
-                        render={({ field }) => (
-                            <input {...field} type="number" placeholder="Age" />
-                        )}
-                    />
-                    {errors.items?.[index]?.age && <p>{errors.items[index].age.message}</p>}
+                        <Controller
+                            name={`items.${index}.age`}
+                            control={control}
+                            defaultValue={field.age || ''}
+                            render={({ field }) => (
+                                <input {...field} type="number" className='border border-black rounded' placeholder="Age" />
+                            )}
+                        />
+                        {errors.items?.[index]?.age && <p>{errors.items[index].age.message}</p>}
 
-                    <button type="button" onClick={() => remove(index)}>
-                        Remove
-                    </button>
+
+
+
+                        <Button variant='contained' type="button" onClick={() => remove(index)}>
+                            Remove
+                        </Button>
+                    </div>
+                ))}
+                <div className='flex gap-4 ml-32 mt-10 '>
+                    <Button variant='contained' type="button" onClick={() => append({ name: '', roll: '', age: '' })}>
+                        Add Item
+                    </Button>
+                    <Button variant='contained' type="submit">Submit</Button>
                 </div>
-            ))}
-            <div className='flex gap-4 '>
-                <button type="button" onClick={() => append({ name: '', roll: '', age: '' })}>
-                    Add Item
-                </button>
-                <button type="submit">Submit</button>
             </div>
         </form>
     );

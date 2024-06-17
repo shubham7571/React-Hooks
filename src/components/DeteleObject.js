@@ -2,18 +2,18 @@ import React, { useState } from 'react'
 
 function Delete() {
 
-    const handleDelet = (yogesh, ) => {
-     
-      let temparr=[...data[yogesh]]
-     
-      temparr.splice(yogesh,)
-      setdata(temparr);
+    const handleDelet = (yogesh,) => {
+
+        let temparr = [...data]
+
+        temparr?.splice(yogesh)
+        setdata(temparr);
     }
 
 
 
 
-    const [data ,setdata] =useState([
+    const [data, setdata] = useState([
         {
             name: 'shubham',
             subject: 'math',
@@ -37,13 +37,13 @@ function Delete() {
     ])
     return (
         <div className=' grid grid-cols-5'>
-            {data.map((shuham , index) => {
+            {data.map((shubham, index) => {
                 return (
-                    <div>
-                        <h4>{shuham.name}</h4>
-                        <p>{shuham.rollno}</p>
-                        <p>{shuham.subject}</p>
-                        <button onClick={()=>handleDelet(index , shuham.name)}>delete</button>
+                    <div key={index}>
+                        <h4>{shubham.name}</h4>
+                        <p>{shubham.rollno}</p>
+                        <p>{shubham.subject}</p>
+                        <button onClick={() => handleDelet(index, shubham.name)}>delete</button>
                     </div>
                 )
             })}

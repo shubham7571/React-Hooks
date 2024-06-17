@@ -15,7 +15,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 function PatientRegistration() {
-  
+
     const [profilePhoto, setProfilePhoto] = useState(null);
     const [prefix, setPrefix] = useState([]);
     const [isd, setIsd] = useState([]);
@@ -46,7 +46,7 @@ function PatientRegistration() {
 
 
 
-    //upload profile
+    //upload profile *******************************************
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         const reader = new FileReader();
@@ -58,7 +58,7 @@ function PatientRegistration() {
     const handleUploadButtonClick = () => {
         document.getElementById('profile-photo-input').click();
     };
-
+    // yup  validations******************************************
     const schema = yup.object().shape({
         registrationDate: yup.string().required(),
         prefix: yup.string().required(),
@@ -68,15 +68,17 @@ function PatientRegistration() {
         dob: yup.date().required(),
         gender: yup.string().required(),
         isd: yup.number().required(),
-        maritalStatus:yup.string().required(),
+        maritalStatus: yup.string().required(),
         nationality: yup.string().required(),
-        bloodGroup: yup.number().required(),
+        bloodGroup: yup.string().required(),
+        houseNo: yup.string().required(),
+        streetAddress: yup.string().required(),
     });
-    const { handleSubmit, reset, control, watch, setValue,formState:{errors} } = useForm({
+    const { handleSubmit, reset, control, watch, setValue, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
     });
 
-    //calculation of age years months days
+    //calculation of age years months days******************************
     const calculateAge = (dob) => {
         const today = new Date();
         const birthDate = new Date(dob);
@@ -99,6 +101,7 @@ function PatientRegistration() {
         return { age: years, years, months, days };
     };
     const dob = watch('dob');
+    const ageDetails = dob ? calculateAge(dob) : { age: '', years: '', months: '', days: '' };
 
     useEffect(() => {
         if (dob) {
@@ -116,11 +119,10 @@ function PatientRegistration() {
     }, [dob, setValue]);
     console.log('');
 
-    const ageDetails = dob ? calculateAge(dob) : { age: '', years: '', months: '', days: '' };
 
 
 
-   
+
 
     const onSubmit = (data) => {
         let tempObj = {
@@ -128,6 +130,8 @@ function PatientRegistration() {
             dob: data?.dob,
             age: ageDetails?.age,
             registrationDate: data?.registrationDate,
+            streetAddress: data?.streetAddress,
+            houseNo: data?.houseNo,
             prefix: {
                 id: prefixName?.id,
                 prefixName: prefixName?.value
@@ -229,7 +233,7 @@ function PatientRegistration() {
         setCityName({ value: value, id: id })
     }
 
-    // patient  registraion  get apis
+    // patient  registraion  get apis*************************************88
     useEffect(() => {
         // preFix api
         PrefixApi()
@@ -290,7 +294,7 @@ function PatientRegistration() {
             })
 
     }, []);
-    // address details get  apis
+    // address details get  apis***********************************************
     useEffect(() => {
         // state Api
         if (countryName) {
@@ -610,8 +614,8 @@ function PatientRegistration() {
                                                 defaultValue=''
 
                                                 render={({ field }) => (
-                                                    <FormControl  error={!!errors.gender}  > 
-                                              
+                                                    <FormControl error={!!errors.gender}  >
+
                                                         <InputLabel id="gender-label">Gender</InputLabel>
                                                         <Select
                                                             {...field}
@@ -631,7 +635,7 @@ function PatientRegistration() {
                                             />
                                         </div>
                                     </div>
-                                    <div className='rounded border h-44 w-80 my-3 p-2'>
+                                    <div className='rounded border h-40 w-80 my-3 p-2'>
                                         <input
                                             id="profile-photo-input"
                                             type="file"
@@ -639,7 +643,7 @@ function PatientRegistration() {
                                             className="hidden"
                                             onChange={handleFileChange}
                                         />
-                                        <img className='h-36 w-72' src={profilePhoto || ProfilePhoto} alt="Profile" />
+                                        <img className='h-32 w-72' src={profilePhoto || ProfilePhoto} alt="Profile" />
                                         <button
                                             type="button"
                                             className="font-medium text-center text-blue-500 w-full"
@@ -780,7 +784,7 @@ function PatientRegistration() {
                             >
                                 <h1 className='font-bold tracking-wide'>Address Details</h1>
                             </AccordionSummary>
-                            <div className='grid grid-cols-4 gap-2 my-2'>
+                            <div className='grid grid-cols-4 gap-2 my-4 mx-4'>
                                 <Controller
                                     name="houseNo"
                                     control={control}
@@ -792,6 +796,8 @@ function PatientRegistration() {
                                             id="houseNo"
                                             size="small"
                                             label="House No/Flat No/Building Name"
+                                            error={!!errors.houseNo}
+
                                             variant="outlined"
                                         />
                                     )}
@@ -807,6 +813,7 @@ function PatientRegistration() {
                                             id="streetAddress"
                                             size="small"
                                             label="Street Address"
+                                            error={!!errors.streetAddress}
                                             variant="outlined"
                                         />
                                     )}
@@ -861,7 +868,7 @@ function PatientRegistration() {
                                     )}
                                 />
                             </div>
-                            <div className='grid grid-cols-4 gap-2 my-4'>
+                            <div className='grid grid-cols-4 gap-2 my-4 mx-4'>
                                 <div className='flex justify-around gap-2'>
                                     <Controller
                                         name="district"

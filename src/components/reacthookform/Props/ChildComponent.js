@@ -61,7 +61,7 @@ function ChildComponent(props) {
     } else {
       reset();
     }
-  }, [props.selectedRow ]);
+  }, [props.selectedRow]);
 
   return (
     <div>

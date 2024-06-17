@@ -22,6 +22,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const style = {
     position: 'absolute',
@@ -90,6 +92,8 @@ function YupValidationForm() {
             setTableData(tempObj);
             setIsEdit(false);
             setCurrentIndex(null);
+            toast.success('Record update successfully!', { position: "bottom-left" });
+
         } else {
             let tempObj = [...tableData];
             let tableObject = {
@@ -105,6 +109,8 @@ function YupValidationForm() {
             };
             tempObj.push(tableObject);
             setTableData(tempObj);
+            toast.success('Record  added successfully!', { position: "bottom-left" });
+
         }
         reset();
         handleClose();
@@ -124,6 +130,7 @@ function YupValidationForm() {
         setIsEdit(true);
         setCurrentIndex(index);
         handleOpen();
+
     };
 
     const handleDelete = () => {
@@ -131,6 +138,8 @@ function YupValidationForm() {
         tempObj.splice(deleteIndex, 1);
         setTableData(tempObj);
         handleConfirmClose();
+        toast.error('Record deleted successfully!', { position: "bottom-left" });
+
     };
 
     // Use for the header
@@ -143,6 +152,7 @@ function YupValidationForm() {
 
     return (
         <div>
+            <ToastContainer/>
             <div className='text-end m-10'>
                 <button onClick={handleOpen} className='bg-black h-10 w-28 rounded  text-white' >Open Modal</button>
             </div>
@@ -241,7 +251,7 @@ function YupValidationForm() {
                             />
                         </div>
                         <div className='text-end'>
-                            <button type="submit" className='bg-black h-10 w-16 rounded font-semibold text-white'>SAVE</button>
+                            <button type="submit" className='bg-black h-10 w-16 rounded font-semibold text-white'>  {isEdit ? 'Update' : 'Save'}</button>
                         </div>
                     </form>
                 </Box>
@@ -259,12 +269,12 @@ function YupValidationForm() {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleConfirmClose} color="primary">
+                    <button className='bg-black h-10 w-16 rounded   text-white' onClick={handleConfirmClose} color="primary">
                         Cancel
-                    </Button>
-                    <Button onClick={handleDelete} color="primary" autoFocus>
+                    </button>
+                    <button  className='bg-black h-10 w-16 rounded   text-white' onClick={handleDelete} color="primary" autoFocus>
                         Delete
-                    </Button>
+                    </button>
                 </DialogActions>
             </Dialog>
             <div>

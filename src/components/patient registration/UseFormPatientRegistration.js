@@ -1,20 +1,16 @@
-import { Box, Button, Modal, TextField } from '@mui/material';
+import { Box, Modal, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoCloseOutline } from "react-icons/io5";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import axios from 'axios';
+import { Bounce, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import * as yup from 'yup';
-
 import { yupResolver } from '@hookform/resolvers/yup';
+import Common_Button from '../commonComponent/commonButton/Common_Button';
+import { USEFORM_REGISTRATION } from '../../http';
 
 const style = {
     position: 'absolute',
@@ -34,14 +30,15 @@ const schema = yup.object().shape({
     standard: yup.string().required('Standard is required'),
     percentage: yup.number().typeError('Percentage must be a number').required('Percentage is required').min(0).max(100),
 });
-function UseFormPatientRegistration() {
 
+function UseFormPatientRegistration() {
     const [open, setOpen] = useState(false);
     const [selectedRow, setSelectedRow] = useState(null);
     const { reset, handleSubmit, register, setValue, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
     });
     const [data, setData] = useState([]);
+
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
         setOpen(false);
@@ -63,8 +60,6 @@ function UseFormPatientRegistration() {
         }
     }, [selectedRow, setValue]);
 
-
-
     const onSubmit = (data) => {
         const tempObj = {
             firstName: data.firstname,
@@ -75,20 +70,24 @@ function UseFormPatientRegistration() {
         };
 
         if (selectedRow) {
-            axios.put(`http://192.168.0.77:8080/updateStudent/${selectedRow.id}`, tempObj)
+            axios.put(`${USEFORM_REGISTRATION}/updateStudent/${selectedRow.id}`, tempObj)
                 .then(() => {
                     getDataFromDataBase();
+                    toast.success("Student updated successfully!");
                 })
                 .catch((err) => {
                     console.log(err);
+                    toast.error("Failed to update student!");
                 });
         } else {
-            axios.post(`http://192.168.0.77:8080/student/save`, tempObj)
+            axios.post(`${USEFORM_REGISTRATION}/student/save`, tempObj)
                 .then(() => {
                     getDataFromDataBase();
+                    toast.success("Student added successfully!");
                 })
                 .catch((error) => {
                     console.log("error", error);
+                    toast.error("Failed to add student!");
                 });
         }
 
@@ -96,12 +95,13 @@ function UseFormPatientRegistration() {
     };
 
     const getDataFromDataBase = () => {
-        axios.get(`http://192.168.0.77:8080/StudentsList`)
+        axios.get(`${USEFORM_REGISTRATION}/StudentsList`)
             .then((res) => {
                 setData(res.data);
             })
             .catch((error) => {
                 console.log('error', error);
+                toast.error("Failed to fetch student data!");
             });
     };
 
@@ -110,23 +110,33 @@ function UseFormPatientRegistration() {
         handleOpen();
     };
 
-    // delete the data
     const handleDelete = (id) => {
         if (window.confirm('Are you sure you want to delete this student?')) {
-            axios.delete(`http://192.168.0.77:8080/deleteStudent/${id}`)
+            axios.delete(`${USEFORM_REGISTRATION}/deleteStudent/${id}`)
                 .then(() => {
                     getDataFromDataBase();
+                    toast.error("Student deleted successfully!", {
+                        toastId: 'delete-toast',
+                        position:'bottom-left',
+                        autoClose: 2000,  
+                        className: 'toast-error', // Custom class for styling
+                        theme:'colored',
+                        transition: Bounce,
+                    });
                 })
                 .catch((err) => {
                     console.log(err);
+                    toast.error("Failed to delete student!");
                 });
         }
     };
 
     return (
         <div>
-            <div className='text-end m-10 '>
-                <Button variant='contained' onClick={handleOpen}>ADD Student</Button>
+                        <ToastContainer theme="colored" />
+
+            <div className='text-end m-10'>
+                <button className='h-10 w-32 bg-black text-white rounded' onClick={handleOpen}>ADD STUDENT</button>
             </div>
             <div>
                 <Modal
@@ -153,8 +163,7 @@ function UseFormPatientRegistration() {
                                     label="First Name"
                                     fullWidth
                                     error={!!errors.firstname}
-                                // helperText={errors.firstname?.message}
-
+                                    // helperText={errors.firstname?.message}
                                 />
                                 <TextField
                                     {...register('lastName')}
@@ -162,7 +171,7 @@ function UseFormPatientRegistration() {
                                     label='Last Name'
                                     fullWidth
                                     error={!!errors.lastName}
-                                // helperText={errors.lastName ? errors.lastName.message : ""}
+                                    // helperText={errors.lastName?.message}
                                 />
                                 <TextField
                                     {...register('age')}
@@ -170,8 +179,7 @@ function UseFormPatientRegistration() {
                                     label='Age'
                                     fullWidth
                                     error={!!errors.age}
-                                // helperText={errors.age ? errors.age.message : ""}
-
+                                    // helperText={errors.age?.message}
                                 />
                                 <TextField
                                     {...register('standard')}
@@ -179,7 +187,7 @@ function UseFormPatientRegistration() {
                                     label='Standard'
                                     fullWidth
                                     error={!!errors.standard}
-                                // helperText={errors.standard ? errors.standard.message : ""}
+                                    // helperText={errors.standard?.message}
                                 />
                                 <TextField
                                     {...register('percentage')}
@@ -187,13 +195,15 @@ function UseFormPatientRegistration() {
                                     label='Percentage'
                                     fullWidth
                                     error={!!errors.percentage}
-                                // helperText={errors.percentage ? errors.percentage.message : ""}
+                                    // helperText={errors.percentage?.message}
                                 />
                             </div>
                             <div className='text-end mt-4'>
-                                <Button variant='contained' type='submit'>
-                                    {selectedRow ? "Update" : "Add"}
-                                </Button>
+                                <Common_Button
+                                    type='submit'
+                                    className="h-10 w-16 bg-black text-white rounded"
+                                    label={selectedRow ? "Update" : "ADD"}
+                                />
                             </div>
                         </form>
                     </Box>

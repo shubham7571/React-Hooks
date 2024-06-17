@@ -28,7 +28,7 @@ const UseRef = ({ data }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row, index) => (
+          {data?.map((row, index) => (
             <TableRow key={index}>
               <TableCell>{row.column1}</TableCell>
               <TableCell>{row.column2}</TableCell>

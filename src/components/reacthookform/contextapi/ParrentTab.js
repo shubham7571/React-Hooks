@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react'; // Import useState hook
+import { useState } from 'react';  
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -45,8 +45,8 @@ function a11yProps(index) {
   };
 }
 
-export default function   BasicTabs() {
-  const [details, setDetails] = useState([]);  
+export default function BasicTabs() {
+  const [details, setDetails] = useState([]);
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -55,7 +55,7 @@ export default function   BasicTabs() {
 
   return (
     <>
-      <NewContext.Provider value={{ details, setDetails }}>  
+      <NewContext.Provider value={{ details, setDetails }}>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Box sx={{ width: '100%', maxWidth: 800 }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

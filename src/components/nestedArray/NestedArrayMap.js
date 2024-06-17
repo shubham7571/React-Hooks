@@ -10,7 +10,7 @@ function NestedArrayMap() {
     const [dataArray, setDataArray] = React.useState(DummyData.subFunction);
 
     const handleParentChange = (e, index) => {
-        e.stopPropagation(); // Prevent the accordion from closing
+        e.stopPropagation();  
         let data = [...dataArray];
         data[index].isChecked = e.target.checked;
 

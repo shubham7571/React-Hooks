@@ -6,13 +6,14 @@ export default function Form() {
     const [submit, setsubmit] = useState([])
     console.log("data", submit);
     const {
-        register, handleSubmit
+        register, handleSubmit,reset
     } = useForm();
     //array of object
     const onsubmit = (object) => {
         let tempArr = [...submit]
         tempArr.push(object)
         setsubmit(tempArr)
+        reset();
     }
     return (
         <div>

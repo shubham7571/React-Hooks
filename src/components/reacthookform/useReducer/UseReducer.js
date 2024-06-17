@@ -9,80 +9,91 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Common_Button from '../../commonComponent/commonButton/Common_Button';
 
 const initialState = {
-    firstname: '',
-    lastname: '',
-    email: '',
-    address: ''
-};
+    todos: [],
+
+}
 
 const formReducer = (state, action) => {
-    switch (action.type) {
+    console.log("action123", state, action);
 
+    switch (action.type) {
         case "ADD_FIELD":
             return {
-                ...state,
-                [action.field]: action.value
+                todos: [
+                    ...state.todos,
+                    {
+                        id: Date.now(),
+                        firstname: action.payload.firstname,
+                        lastname: action.payload.lastname,
+                        age: action.payload.age,
+                        address: action.payload.address
+                    }
+                ]
+            };
+        case 'DELETE_ROW':
+            return {
+                todos: state.todos.filter((todo) => todo.id !== action.payload)
+            };
+        case 'EDIT_ROW':
+            return {
+                todos: state.todos.map((todo) =>
+                    todo.id === action.payload.id ? { ...todo, ...action.payload } : todo
+                )
             };
         case 'RESET_FORM':
             return initialState;
-
-        case 'DELETE_ROW':
-            return state.filter((index) => index !== action.index);
-
-        case 'EDIT_ROW':
-            return {
-                ...state,
-                ...action.data
-            }
-
         default:
             return state;
     }
 };
-
 function UseReducerForm() {
     const [state, dispatch] = useReducer(formReducer, initialState);
-    const [data, setData] = useState([]);
-    const [selectedRow, setSelectedRow] = useState(null)
+    const [newToDo, setNewToDo] = useState({
+        id: "",
+        firstname: "",
+        lastname: "",
+        age: "",
+        address: ""
+    });
+    const [selectedRow, setSelectedRow] = useState(null);
     const buttonLabel = selectedRow !== null ? 'UPDATE' : 'ADD';
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        let tempArr = [...data];
         if (selectedRow !== null) {
-            tempArr[selectedRow] = state;
-        } else { tempArr.push(state); }
-
-        setData(tempArr);
-        console.log("data", tempArr);
-        dispatch({ type: 'RESET_FORM' });
+            dispatch({
+                type: 'EDIT_ROW',
+                payload: newToDo
+            });
+        } else {
+            dispatch({
+                type: 'ADD_FIELD',
+                payload: newToDo
+            });
+        }
+        setNewToDo({
+            id: "",
+            firstname: "",
+            lastname: "",
+            age: "",
+            address: ""
+        });
         setSelectedRow(null);
     };
 
-    const handleInput = (field, value) => {
-        dispatch({
-            type: 'ADD_FIELD',
-            field,
-            value
-        });
-    };
-    const handleDeleteRow = (index) => {
-
+    const handleDeleteRow = (id) => {
         dispatch({
             type: 'DELETE_ROW',
-            index
-        })
-        // const newData=[...data]
-        // newData.splice(index,1)
-        // setData(newData)
-    }
-    const handleEditRow = (index) => {
-        const rowData = data[index];
-        dispatch({
-            type: 'EDIT_ROW',
-            data: rowData
+            payload: id
         });
+    };
+
+    const handleEditRow = (index) => {
+        const rowData = state.todos[index];
+        setNewToDo(rowData);
         setSelectedRow(index);
     };
 
@@ -91,68 +102,67 @@ function UseReducerForm() {
             <div className='flex justify-center'>
                 <form className='' onSubmit={handleSubmit}>
                     <div className='flex space-x-4 mt-9'>
-                        <input type='text' className='border rounded' placeholder='Enter the FirstName'
-                            value={state.firstname} onChange={(e) => handleInput('firstname', e.target.value)} />
-                        <input type='text' className='border rounded' placeholder='Enter the LastName'
-                            value={state.lastname} onChange={(e) => handleInput('lastname', e.target.value)} />
-                        <input type='text' className='border rounded' placeholder='Enter the Email'
-                            value={state.email} onChange={(e) => handleInput('email', e.target.value)} />
-                        <input type='text' className='border rounded' placeholder='Enter the Address'
-                            value={state.address} onChange={(e) => handleInput('address', e.target.value)} />
-                        <button button label={buttonLabel}
+                        <input type='text' className='border  rounded  ' placeholder='Enter the FirstName'
+                            value={newToDo?.firstname} onChange={(e) => setNewToDo((prev) => ({ ...prev, firstname: e.target.value }))} />
+                        <input type='text' className='border  rounded  ' placeholder='Enter the LastName'
+                            value={newToDo?.lastname} onChange={(e) => setNewToDo((prev) => ({ ...prev, lastname: e.target.value }))} />
+                        <input type='text' className='border  rounded  ' placeholder='Enter the Age'
+                            value={newToDo?.age} onChange={(e) => setNewToDo((prev) => ({ ...prev, age: e.target.value }))} />
+                        <input type='text' className='border  rounded  ' placeholder='Enter the Address'
+                            value={newToDo?.address} onChange={(e) => setNewToDo((prev) => ({ ...prev, address: e.target.value }))} />
+                        {/* <CommonButton label={buttonLabel}
                             type='submit'
-                            className="bg-black text-white px-2 rounded py-2"
-                        >ADD</button>
+                            className="bg-black text-white px-2   rounded  py-2"
+                        /> */}
+
+                        <Common_Button
+                            type='submit'
+                            className='rounded bg-black text-white px-2 py-2 '
+                            label='Submit'
+                        />
                     </div>
                 </form>
             </div>
-            <div className='mt-20'>
-                {
-                    data.length > 0 ? (
-                        <TableContainer component={Paper}>
-                            <Table sx={{ minWidth: 650 }} size="small"  >
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>FirstName</TableCell>
-                                        <TableCell>LastName</TableCell>
-                                        <TableCell>Email</TableCell>
-                                        <TableCell>Address</TableCell>
-                                        <TableCell>Action</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {
-                                        data.map((item, index) => (
-                                            <TableRow
-                                                key={index}
 
-                                            >
-                                                <TableCell>{item.firstname}</TableCell>
-                                                <TableCell>{item.lastname}</TableCell>
-                                                <TableCell>{item.email}</TableCell>
-                                                <TableCell>{item.address}</TableCell>
-                                                <TableCell>
-                                                    <div className='flex gap-4'>
-                                                        <EditIcon onClick={() => {
-                                                            handleEditRow(index);
-                                                            setSelectedRow(index);
-                                                        }} />
-                                                        <DeleteIcon onClick={() => handleDeleteRow(index)} />
-                                                    </div>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))
-                                    }
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    ) : (
-                        <h1 className='text-center text-xl  mt-7'>No Result Found...</h1>
-                    )
-                }
+            <div  className='mt-20'>
+                {state.todos.length > 0 ? (
+                    <TableContainer component={Paper}>
+                        <Table sx={{ minWidth: 650 }} size="small">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>FirstName</TableCell>
+                                    <TableCell>LastName</TableCell>
+                                    <TableCell>Age</TableCell>
+                                    <TableCell>Address</TableCell>
+                                    <TableCell>Action</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {state.todos.map((item, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell>{item.firstname}</TableCell>
+                                        <TableCell>{item.lastname}</TableCell>
+                                        <TableCell>{item.age}</TableCell>
+                                        <TableCell>{item.address}</TableCell>
+                                        <TableCell>
+                                            <div className='flex gap-4'>
+                                                <EditIcon onClick={() => handleEditRow(index)} />
+                                                <DeleteIcon onClick={() => handleDeleteRow(item.id)} />
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                ) : (
+                    <h1 className='text-center text-xl font-semibold mt-7'>NO Result Found...</h1>
+                )}
             </div>
         </div>
     );
 }
 
 export default UseReducerForm;
+
+

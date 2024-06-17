@@ -90,7 +90,7 @@ function BasicInformation() {
 
 
             </div>
-            <Button type="submit" variant="contained" color="primary">Next</Button>
+            <Button  type="submit" variant="contained" color="primary">Next</Button>
         </form>
     );
 }

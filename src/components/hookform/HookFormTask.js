@@ -20,7 +20,7 @@ function HookFormTask() {
     
 
     const onSubmit = (data) => {
-        let tempObj = [...tableData]
+        let tempObj = [...tableData]   
         let tableObject = {
             "First Name": data?.firstName,
             "Last Name": data?.lastName,
@@ -30,7 +30,7 @@ function HookFormTask() {
         tempObj.push(tableObject)
         setTableData(tempObj)
         console.log("data", data)
-        reset(); // empty the text feild or  form
+        reset();  
         // setValue("firstName", ""); // set the value after use
 
     }
@@ -46,7 +46,7 @@ function HookFormTask() {
     return (
         <div className='my-10   text-center'>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <label className=' font-serif font-bold'> React Hook From With Table. </label>
+                <label className=' font-serif font-bold'> REACT  HOOK  FORM </label>
 
                 <div className='space-x-10 mt-20'>
                     <TextField

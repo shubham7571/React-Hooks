@@ -37,7 +37,7 @@
 // import UseHookEff from "./practics/UseHookEff";
 
 
-// import Table from "./practics/reuseableTable/Table";
+import Table from "./practics/reuseableTable/Table";
 // import Result from "./components/softwaretask/Result";
 // import ChildToParent from "./practics/ChildToParent";
 
@@ -59,25 +59,24 @@
 import TableCurd from "./components/about/TableCurd";
 
 // import InputFiledTask from "./components/task/InputFiledTask";
-// import Delete from "./components/DeteleObject";
+import Delete from "./components/DeteleObject";
 // import BasicFrom from "./practics/BasicFrom";
 // import UseHookRef from "./practics/UseHookRef";
-// import Student from "./practics/Student";
 
 
 // reacthookfrom
 // import TableFrom from "./components/reacthookform/TableFrom";
-// import ParentComponent from "./components/reacthookform/Props/ParentComponent"
+import ParentComponent from "./components/reacthookform/Props/ParentComponent"
 import Form from "./components/hookform/Form";
-// import YupValidation from "./components/hookform/yupvalidation/YupValidation";
-// import Configuration from "./components/reacthookform/totalPriceGst/Configuration";
+import YupValidation from "./components/hookform/yupvalidation/YupValidation";
+import Configuration from "./components/reacthookform/totalPriceGst/Configuration";
 // import CrudOperation from "./components/hookform/crudOperation/CrudOperation";
 import ReuseableTable from "./components/reacthookform/reuseabletable/ReuseableTable";
 // import Navbar from "./components/reacthookform/reuseableTask/Navbar";
-// import UseRef from "./components/reacthookform/keyUpDown/UseRef";
+import UseRef from "./components/reacthookform/keyUpDown/UseRef";
 // import TableFrom from "./components/reacthookform/totalPriceGst/TableForm"
 // import Rough from "./components/softwaretask/Rough";
-// import ParrentTab from "./components/reacthookform/contextapi/ParrentTab"
+import ParrentTab from "./components/reacthookform/contextapi/ParrentTab"
 // import Rough from "./components/reacthookform/timeset/Rough";
 import FilterMethod from "./components/arraymethod/FilterMethod";
 import Find from "./components/arraymethod/Find";
@@ -96,6 +95,11 @@ import HookFormTask from "./components/hookform/HookFormTask";
 import YupValidationForm from "./components/hookform/yupvalidation/YupValidationForm";
 import NestedArrayMap from "./components/nestedArray/NestedArrayMap";
 import UseFiledArray from "./components/hookform/yupvalidation/UseFiledArray";
+import UseCounter from "./components/hookform/customHook/UseCounter";
+import SearchFilter from "./components/arraymethod/SearchFilter";
+import Common_Button from "./components/commonComponent/commonButton/Common_Button";
+import Pagination from "./components/pagination/Pagination";
+
 function App() {
     // const [text,setText] =useState("")
     // const [data,setdata] = useState(prop);
@@ -150,7 +154,7 @@ function App() {
             {/* <InputFiledTask/> */}
             {/* <Student /> */}
             {/* <Counter /> */}
-            {/* <Table /> */}
+            <Table />
             {/* <UseContextPage1/> */}
 
 
@@ -187,10 +191,27 @@ function App() {
             {/* <FindIndex/> */}
             {/* <Find/> */}
             {/* <Includes/> */}
-            {/* <HookFormTask/> */}
+            {/* <SearchFilter /> */}
+            <HookFormTask/>
 
 
-            {/* <Configuration /> */}
+
+            {/* custom hook */}
+            {/* <UseCounter /> */}
+
+
+            {/* Api */}
+            {/* <PatientRegistration /> */}
+            {/* <UseFormPatientRegistration /> */}
+            {/* <Pagination/> */}
+
+
+
+            {/* common components */}
+            {/* <Common_Button/> */}
+
+
+            {/* <Configuration />    */}
             {/* <Form/> */}
             {/* <UseFiledArray/> */}
             {/* <YupValidation/> */}
@@ -207,9 +228,8 @@ function App() {
             {/* <UseReducer/> */}
             {/* <Axios/> */}
             {/* <PdfTask/> */}
-            {/* <PatientRegistration/> */}
-            {/* <UseFormPatientRegistration/> */}
-            {/* <NestedArrayMap/> */}
+
+            {/* <NestedArrayMap /> */}
 
 
 

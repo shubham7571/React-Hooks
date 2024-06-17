@@ -2,6 +2,8 @@ import React, { useReducer } from 'react'
 
 
 const reducer = (state, action) => {
+
+    //switch case
     switch (action.type) {
         case "INCREMENT":
             return { count: state.count==10  ? state.count% state.count:state.count+ 1 };
