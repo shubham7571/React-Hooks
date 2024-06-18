@@ -27,6 +27,8 @@ function UseFiledArray() {
             items: [{ name: '', age: '' }], // Initialize with one empty object
         },
     });
+    // append means add 
+    //The fields array contains the current list of fields managed by useFieldArray.
 
     const { fields, append, remove } = useFieldArray({
         control,
@@ -65,9 +67,13 @@ function UseFiledArray() {
 
 
 
-                        <Button variant='contained' type="button" onClick={() => remove(index)}>
-                            Remove
-                        </Button>
+                        {
+                            index > 0 && (
+                                <Button variant='contained' type="button" onClick={() => remove(index)}>
+                                    Remove
+                                </Button>
+                            )
+                        }
                     </div>
                 ))}
                 <div className='flex gap-4 ml-32 mt-10 '>

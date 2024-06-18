@@ -65,7 +65,7 @@ import Delete from "./components/DeteleObject";
 
 
 // reacthookfrom
-// import TableFrom from "./components/reacthookform/TableFrom";
+import TableFrom from "./components/reacthookform/TableFrom";
 import ParentComponent from "./components/reacthookform/Props/ParentComponent"
 import Form from "./components/hookform/Form";
 import YupValidation from "./components/hookform/yupvalidation/YupValidation";
@@ -99,6 +99,13 @@ import UseCounter from "./components/hookform/customHook/UseCounter";
 import SearchFilter from "./components/arraymethod/SearchFilter";
 import Common_Button from "./components/commonComponent/commonButton/Common_Button";
 import Pagination from "./components/pagination/Pagination";
+import Register from "./components/reacthookform/reuseableTask/Register";
+import PasswordForm from "./components/hookform/passwordform/PasswordForm";
+import SetError from "./components/hookform/passwordform/seterror/SetError";
+import IsValid from "./components/hookform/passwordform/seterror/IsValid";
+import MiniDrawer from "./components/Drawer/MiniDrawer";
+import Index from "./components/Drawer/Index";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
     // const [text,setText] =useState("")
@@ -142,8 +149,7 @@ function App() {
                     <Route path='/drafts' exact element={<Drafts/>}></Route>
                 </Routes>
             </BrowerserRouter> */}
-
-
+                
             {/* <Decrementbutton/> */}
             {/* <Task1 /> */}
             {/* <Inputkey/> */}
@@ -154,7 +160,7 @@ function App() {
             {/* <InputFiledTask/> */}
             {/* <Student /> */}
             {/* <Counter /> */}
-            <Table />
+            {/* <Table /> */}
             {/* <UseContextPage1/> */}
 
 
@@ -184,7 +190,10 @@ function App() {
             {/* <TableFrom /> */}
             {/* <ParentComponent/> */}
             {/* <TableForm/>  */}
-            {/* <PasswordShow /> */}
+            {/* <PasswordShow />  */}
+            {/* <PasswordForm/> */}
+            {/* <SetError/> */}
+            {/* <IsValid/> */}
 
             {/* array method */}
             {/* <FilterMethod/> */}
@@ -192,7 +201,7 @@ function App() {
             {/* <Find/> */}
             {/* <Includes/> */}
             {/* <SearchFilter /> */}
-            <HookFormTask/>
+            {/* <HookFormTask/> */}
 
 
 
@@ -212,6 +221,7 @@ function App() {
 
 
             {/* <Configuration />    */}
+            <MiniDrawer />
             {/* <Form/> */}
             {/* <UseFiledArray/> */}
             {/* <YupValidation/> */}
@@ -230,7 +240,6 @@ function App() {
             {/* <PdfTask/> */}
 
             {/* <NestedArrayMap /> */}
-
 
 
         </div>

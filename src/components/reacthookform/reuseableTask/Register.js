@@ -1,13 +1,11 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { GiCancel } from "react-icons/gi";
-import { Link } from 'react-router-dom';
 
 const style = {
     position: 'absolute',
@@ -21,11 +19,11 @@ const style = {
     p: 4,
 };
 
-export default function Register() {
+export default function Register(handleClose,open,loginData ,setLoginData) {
 
     const schema = yup.object().shape({
-        FirstName: yup.string().required("Please enter  First Name"),
-         LastName: yup.string().required("please enter your"),
+        FirstName: yup.string().required("Please enter your  First Name"),
+        Email: yup.string().email("Please enter a valid email").required("Please enter your email"),
         Password: yup.string().required("please enter your Password"),
     });
 console.log("props.loginData",loginData);
@@ -39,9 +37,9 @@ console.log("props.loginData",loginData);
     });
 
     const onSubmit = (data) => {
-        // let tempArr = [...loginData];
-        // tempArr.push(data);
-        // setLoginData(tempArr);
+        let tempArr = [...loginData];
+        tempArr.push(data);
+        setLoginData(tempArr);
         reset();
     };
 
@@ -69,7 +67,7 @@ console.log("props.loginData",loginData);
                                         label=" First Name"
                                         {...register("FirstName")}
                                         error={errors.FirstName?.message}
-                                        helperText={errors.FirstName?.message}
+                                        // helperText={errors.FirstName?.message}
                                     />
                                 </div>
                                 <div>
@@ -79,7 +77,7 @@ console.log("props.loginData",loginData);
                                         label="Email"
                                         {...register("Email")}
                                         error={errors.Email?.message}
-                                        helperText={errors.Email?.message}
+                                        // helperText={errors.Email?.message}
                                     />
                                 </div>
                                 <div>
@@ -89,11 +87,11 @@ console.log("props.loginData",loginData);
                                         label="Password"
                                         {...register("Password")}
                                         error={errors.Password?.message}
-                                        helperText={errors.Password?.message}
+                                        // helperText={errors.Password?.message}
                                     />
                                 </div>
                                 <div className='text-center my-4'>
-                                    <Button variant='contained' type="submit">Create Account</Button>
+                                    <button  type="submit" className=' bg-black text-white p-2 rounded  w-56'>Create Account</button>
                                     
                                 </div>
                                 <div>Already have an account? <span>Login</span> </div>
@@ -101,12 +99,12 @@ console.log("props.loginData",loginData);
                                 <div className='space-y-2 t'>
                                     <div>
                                         <a href='https://www.google.com/?hl=la'>
-                                            <Button variant='contained' className='focus:border-blue-500  w-56'>sign Up with Google</Button>
+                                            <button  type='button'  className=' bg-black text-white p-2 rounded  w-56'>Sign Up with Google</button>
                                         </a>
                                     </div>
                                     <div>
                                         <a href='https://www.facebook.com/login/'>
-                                            <Button variant='contained' className='focus:border-blue-500 w-56 my-2'>Sign Up with Facebook</Button>
+                                            <button  type='button'  className='bg-black text-white p-2 rounded  w-56'>Sign Up with Facebook</button>
                                         </a>
                                     </div>
                                 </div>

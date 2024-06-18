@@ -1,6 +1,5 @@
-import { Box, Modal, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Box, Modal, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { IoCloseOutline } from "react-icons/io5";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -11,6 +10,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Common_Button from '../commonComponent/commonButton/Common_Button';
 import { USEFORM_REGISTRATION } from '../../http';
+import { useForm } from 'react-hook-form';
 
 const style = {
     position: 'absolute',
@@ -60,14 +60,24 @@ function UseFormPatientRegistration() {
         }
     }, [selectedRow, setValue]);
 
-    const onSubmit = (data) => {
+    const onSubmit = (formData) => {
         const tempObj = {
-            firstName: data.firstname,
-            lastName: data.lastName,
-            age: data.age,
-            std: data.standard,
-            percentage: data.percentage
+            firstName: formData.firstname,
+            lastName: formData.lastName,
+            age: formData.age,
+            std: formData.standard,
+            percentage: formData.percentage
         };
+
+        // Check if the student already exists in current data
+        const isDuplicate = data.some(item =>
+            item.firstName.toLowerCase() === tempObj.firstName.toLowerCase() &&
+            item.lastName.toLowerCase() === tempObj.lastName.toLowerCase()
+        );
+        if (isDuplicate) {
+            toast.error("Student already exists!");
+            return;
+        }
 
         if (selectedRow) {
             axios.put(`${USEFORM_REGISTRATION}/updateStudent/${selectedRow.id}`, tempObj)
@@ -83,7 +93,7 @@ function UseFormPatientRegistration() {
             axios.post(`${USEFORM_REGISTRATION}/student/save`, tempObj)
                 .then(() => {
                     getDataFromDataBase();
-                    toast.success("Student added successfully!");
+                    toast.success("Student added successfully!", { position: 'bottom-left', });
                 })
                 .catch((error) => {
                     console.log("error", error);
@@ -117,10 +127,10 @@ function UseFormPatientRegistration() {
                     getDataFromDataBase();
                     toast.error("Student deleted successfully!", {
                         toastId: 'delete-toast',
-                        position:'bottom-left',
-                        autoClose: 2000,  
-                        className: 'toast-error', // Custom class for styling
-                        theme:'colored',
+                        position: 'bottom-left',
+                        autoClose: 2000,
+                        className: 'toast-error',
+                        theme: 'colored',
                         transition: Bounce,
                     });
                 })
@@ -133,8 +143,7 @@ function UseFormPatientRegistration() {
 
     return (
         <div>
-                        <ToastContainer theme="colored" />
-
+            <ToastContainer theme="colored" />
             <div className='text-end m-10'>
                 <button className='h-10 w-32 bg-black text-white rounded' onClick={handleOpen}>ADD STUDENT</button>
             </div>
@@ -163,7 +172,6 @@ function UseFormPatientRegistration() {
                                     label="First Name"
                                     fullWidth
                                     error={!!errors.firstname}
-                                    // helperText={errors.firstname?.message}
                                 />
                                 <TextField
                                     {...register('lastName')}
@@ -171,15 +179,23 @@ function UseFormPatientRegistration() {
                                     label='Last Name'
                                     fullWidth
                                     error={!!errors.lastName}
-                                    // helperText={errors.lastName?.message}
                                 />
                                 <TextField
                                     {...register('age')}
                                     size='small'
                                     label='Age'
+                                    type='number'
+                                    sx={{
+                                        '& input[type=number]': {
+                                            '-moz-appearance': 'textfield', // Firefox
+                                        },
+                                        '& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button': {
+                                            '-webkit-appearance': 'none', // Chrome, Safari, Edge, Opera
+                                            margin: 0,
+                                        },
+                                    }}
                                     fullWidth
                                     error={!!errors.age}
-                                    // helperText={errors.age?.message}
                                 />
                                 <TextField
                                     {...register('standard')}
@@ -187,7 +203,6 @@ function UseFormPatientRegistration() {
                                     label='Standard'
                                     fullWidth
                                     error={!!errors.standard}
-                                    // helperText={errors.standard?.message}
                                 />
                                 <TextField
                                     {...register('percentage')}
@@ -195,7 +210,6 @@ function UseFormPatientRegistration() {
                                     label='Percentage'
                                     fullWidth
                                     error={!!errors.percentage}
-                                    // helperText={errors.percentage?.message}
                                 />
                             </div>
                             <div className='text-end mt-4'>
