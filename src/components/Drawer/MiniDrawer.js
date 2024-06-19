@@ -143,11 +143,10 @@ export default function MiniDrawer() {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {/* Use Link component from react-router-dom */}
                     {sideBar?.map((item, index) => (
                         <ListItem key={item.text} disablePadding sx={{ display: 'block' }}>
                             <ListItemButton
-                                component={Link} // Wrap ListItemButton with Link for navigation
+                                component={Link}  
                                 to={item.to}
                                 sx={{
                                     minHeight: 48,

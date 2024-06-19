@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Common_Button = ({ type = 'button', label, className, style, onClick, onChange, disabled = false, }) => {
+const Common_Button = ({ type , label, className, style, onClick, onChange,  }) => {
 
      
     return (
@@ -10,7 +10,7 @@ const Common_Button = ({ type = 'button', label, className, style, onClick, onCh
             style={style}
             onClick={onClick}
             onChange={onChange}
-            disabled={disabled}
+            
         >
             {label}
 
