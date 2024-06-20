@@ -21,7 +21,7 @@ function Usetable({ TableInfo }) {
                     <TableHead >
                         <TableRow >
                             {
-                                header.map((item) => (
+                                header?.map((item) => (
                                     <TableCell align="right">{item}</TableCell>
                                 ))
                             }
@@ -33,10 +33,10 @@ function Usetable({ TableInfo }) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                     {TableInfo.map((shubham)=>(
+                     {TableInfo?.map((item)=>(
                         <TableRow>
-                            {header.map((panu)=>(
-                                <TableCell>{shubham[panu]}</TableCell>
+                            {header?.map((abc)=>(
+                                <TableCell>{item[abc]}</TableCell>
                             ))}
                         </TableRow>
                      ))}

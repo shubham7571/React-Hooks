@@ -121,7 +121,6 @@ function App() {
             </NewContext.Provider> */}
             {/* <Stepper/> */}
             {/* <Navbar2 /> */}
-            {/* <Table /> */}
             {/* <ItemCreation/> */}
             {/* <BookTickets/> */}
             {/* <center /> */}

@@ -36,15 +36,15 @@ const NewTask16 = () => {
     country: yup.object().required("Country is required"),
     state: yup.object().required("State is required"),
     district: yup.object().required("District is required"),
-    taluka:yup.object().required("Taluka is required"),
-    cityName:yup.object().required("cityName is required"),
-    pinCode:yup.number().required()
+    taluka: yup.object().required("Taluka is required"),
+    cityName: yup.object().required("cityName is required"),
+    pinCode: yup.number().required()
   });
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const { control, handleSubmit, reset, watch, formState: { errors },register } = useForm({
+  const { control, handleSubmit, reset, watch, formState: { errors }, register } = useForm({
     resolver: yupResolver(schema)
   });
   const [tableData, setTableData] = useState();
@@ -95,11 +95,11 @@ const NewTask16 = () => {
     };
 
 
-await axios.post("",PostObj).then((res)=>{console.log(res)})
+    await axios.post("", PostObj).then((res) => { console.log(res) })
 
 
   }
-  
+
   useEffect(() => {
     if (countryName !== null) {
       axios
@@ -155,10 +155,10 @@ await axios.post("",PostObj).then((res)=>{console.log(res)})
     console.log("actualData", data);
     console.log("tableData", tableData);
     const title = [];
-       title.push(Object.keys(data))
-       console.log("keys",title)
-       setTableDataKey(title)
-       postData()
+    title.push(Object.keys(data))
+    console.log("keys", title)
+    setTableDataKey(title)
+    postData()
     reset();
   };
 
@@ -166,7 +166,7 @@ await axios.post("",PostObj).then((res)=>{console.log(res)})
     reset();
   }
 
-   
+
   return (
     <>
       <div>
@@ -175,7 +175,7 @@ await axios.post("",PostObj).then((res)=>{console.log(res)})
             <div className="m-4 flex rounded-sm w-96 ">
               <TextField
                 className="mx-2"
-             
+
                 size="small"
                 fullWidth
               />
@@ -195,18 +195,18 @@ await axios.post("",PostObj).then((res)=>{console.log(res)})
         </div>
       </div>
       <div className="mt-20">
-      {tableData != null
-                ?  <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow className="bg-gray-200 ">
-                <TableCell>Country</TableCell>
-                <TableCell>State</TableCell>
-                <TableCell>District</TableCell>
-                <TableCell>Taluka</TableCell>
-                <TableCell>CityName</TableCell>
-                <TableCell>Action</TableCell>
-                {/* {
+        {tableData != null
+          ? <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow className="bg-gray-200 ">
+                  <TableCell>Country</TableCell>
+                  <TableCell>State</TableCell>
+                  <TableCell>District</TableCell>
+                  <TableCell>Taluka</TableCell>
+                  <TableCell>CityName</TableCell>
+                  <TableCell>Action</TableCell>
+                  {/* {
                   tableDataKey.map((obj)=>{
                     return(
                       <TableCell className="mx-8">{obj}</TableCell>
@@ -214,10 +214,10 @@ await axios.post("",PostObj).then((res)=>{console.log(res)})
 
                   })
                 } */}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              { tableData.map((obj, index) => (
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {tableData.map((obj, index) => (
                   <TableRow
                     key={index}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -230,10 +230,10 @@ await axios.post("",PostObj).then((res)=>{console.log(res)})
                     <TableCell>{obj.active ? <p>Active</p> : <p>InActive</p>}</TableCell>
                   </TableRow>
                 ))}
-               
-            </TableBody>
-          </Table>
-        </TableContainer> : ""}
+
+              </TableBody>
+            </Table>
+          </TableContainer> : ""}
       </div>
 
       <div>
@@ -261,7 +261,7 @@ await axios.post("",PostObj).then((res)=>{console.log(res)})
                     defaultValue=""
                     render={({ field }) => (
                       <Select
-                   
+
                         {...field}
                         placeholder="Select Country*"
                         options={
@@ -352,9 +352,9 @@ await axios.post("",PostObj).then((res)=>{console.log(res)})
                       />
                     )}
                   />
-               
-                      <TextField size="small" {...register("pinCode")} placeholder="pincode" error={errors.pinCode} />
-                 
+
+                  <TextField size="small" {...register("pinCode")} placeholder="pincode" error={errors.pinCode} />
+
                   <span className="mt-2">
                     <Controller
                       name="active"
