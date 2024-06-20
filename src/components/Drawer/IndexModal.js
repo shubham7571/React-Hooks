@@ -40,6 +40,8 @@ function IndexModal({ handleClose, open, tableData, setTableData }) {
     handleClose();
   };
 
+
+
   return (
     <Modal
       open={open}
@@ -49,7 +51,7 @@ function IndexModal({ handleClose, open, tableData, setTableData }) {
     >
       <Box sx={style}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <IconButton onClick={handleClose} style={{ position: 'absolute', color:'red', top: 8, right: 8 }}>
+          <IconButton onClick={handleClose} style={{ position: 'absolute', color: 'red', top: 8, right: 8 }}>
             <HighlightOffIcon />
           </IconButton>
           <div className='text-center grid grid-cols-3 gap-4'>

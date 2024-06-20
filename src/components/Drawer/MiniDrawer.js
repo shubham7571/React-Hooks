@@ -20,6 +20,8 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { Link, Route, Routes } from 'react-router-dom';
 import Index from './Index';
+import Tooltip from '@mui/material/Tooltip';
+
 
 const drawerWidth = 180;
 
@@ -29,12 +31,11 @@ const sideBar = [
     { text: 'Inbox', to: '/index', icon: <InboxIcon /> },
     { text: 'Starred', to: '/other', icon: <MailIcon /> },
     { text: 'Inbox', to: '/index', icon: <InboxIcon /> },
-    { text: 'Starred', to: '/other', icon: <MailIcon /> },
+    { text: 'Starred', to: '/other', icon: <MailIcon /> },         
     { text: 'Inbox', to: '/index', icon: <InboxIcon /> },
     { text: 'Starred', to: '/other', icon: <MailIcon /> },
     { text: 'Inbox', to: '/index', icon: <InboxIcon /> },
-    { text: 'Starred', to: '/other', icon: <MailIcon /> }, // Example path
-    // Add more items as needed
+    { text: 'Starred', to: '/other', icon: <MailIcon /> },                                            
 ]
 
 const openedMixin = (theme) => ({

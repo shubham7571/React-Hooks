@@ -106,6 +106,7 @@ import IsValid from "./components/hookform/passwordform/seterror/IsValid";
 import MiniDrawer from "./components/Drawer/MiniDrawer";
 import Index from "./components/Drawer/Index";
 import { Route, Routes } from "react-router-dom";
+import Reuse from "./components/commonComponent/TextFiledReuse/Reuse";
 
 function App() {
     // const [text,setText] =useState("")
@@ -193,6 +194,9 @@ function App() {
             {/* <PasswordForm/> */}
             {/* <SetError/> */}
             {/* <IsValid/> */}
+<Reuse/>
+
+
 
             {/* array method */}
             {/* <FilterMethod/> */}
@@ -220,7 +224,7 @@ function App() {
 
 
             {/* <Configuration />    */}
-            <MiniDrawer />
+            {/* <MiniDrawer /> */}
             {/* <Form/> */}
             {/* <UseFiledArray/> */}
             {/* <YupValidation/> */}
